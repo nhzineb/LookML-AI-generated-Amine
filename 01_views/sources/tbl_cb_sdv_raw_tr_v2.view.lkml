@@ -258,6 +258,12 @@ view: tbl_cb_sdv_raw_tr_v2 {
     description: "Timestamp when the Test Run execution completed."
   }
 
+  dimension: reported_bugs_id {
+    hidden: yes
+    sql: ${TABLE}.Reported_Bugs_Id ;;
+    description: "Numeric IDs of bugs reported during the Test Run."
+  }
+
   dimension: reported_bugs {
     type: string
     sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.Reported_Bugs) AS x), ', ') ;;

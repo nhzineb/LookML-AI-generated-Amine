@@ -45,12 +45,32 @@ view: tbl_cb_sdv_raw_issue_v2 {
     description: "Severity or priority level of the Issue (e.g., Blocker, Critical, Major, Minor)."
   }
 
+  dimension: tracker {
+    type: string
+    sql: ${TABLE}.Tracker ;;
+    description: "CodeBeamer Tracker name hosting the Issue."
+  }
+
+  dimension: created_by {
+    type: string
+    sql: ${TABLE}.Created_By ;;
+    description: "Author who created the Issue."
+  }
+
   dimension_group: created {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
     datatype: datetime
     sql: ${TABLE}.Created_Datetime ;;
     description: "Timestamp when the Issue was created in Jira."
+  }
+
+  dimension_group: closed {
+    type: time
+    timeframes: [raw, time, date, week, month, quarter, year]
+    datatype: datetime
+    sql: ${TABLE}.Closed_At ;;
+    description: "Timestamp when the Issue was closed."
   }
 
   dimension_group: updated {

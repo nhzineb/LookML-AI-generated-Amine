@@ -39,7 +39,7 @@ explore: traceability {
 
   join: tbl_cb_sdv_raw_tc_v2 {
     view_label: "3. Test Case (tbl_cb_sdv_raw_tc_v2)"
-    type: full_outer
+    type: left_outer
     relationship: many_to_one
     sql_on: ${gold_dim_fact_req_tc.tc_id} = ${tbl_cb_sdv_raw_tc_v2.id} ;;
   }

@@ -24,7 +24,7 @@
     type: field_filter
     model: ampere_sdv_analytics
     explore: traceability
-    field: fact_tc_tr_ts_req.tr_my_sf
+    field: fact_tc_tr_ts_req.tr_mysf
 
   elements:
   - title: "Total Requirements"
@@ -32,11 +32,11 @@
     model: ampere_sdv_analytics
     explore: traceability
     type: single_value
-    fields: [gold_dim_req.count_requirements]
+    fields: [gold_dim_req.requirement_count]
     listen:
       req_domain: gold_dim_req.req_domain
       ts_baseline: gold_dim_ts.ts_baseline
-      tr_my_sf: fact_tc_tr_ts_req.tr_my_sf
+      tr_my_sf: fact_tc_tr_ts_req.tr_mysf
     row: 0
     col: 0
     width: 6
@@ -51,7 +51,7 @@
     listen:
       req_domain: gold_dim_req.req_domain
       ts_baseline: gold_dim_ts.ts_baseline
-      tr_my_sf: fact_tc_tr_ts_req.tr_my_sf
+      tr_my_sf: fact_tc_tr_ts_req.tr_mysf
     row: 0
     col: 6
     width: 6
@@ -66,7 +66,7 @@
     listen:
       req_domain: gold_dim_req.req_domain
       ts_baseline: gold_dim_ts.ts_baseline
-      tr_my_sf: fact_tc_tr_ts_req.tr_my_sf
+      tr_my_sf: fact_tc_tr_ts_req.tr_mysf
     row: 0
     col: 12
     width: 6
@@ -81,7 +81,7 @@
     listen:
       req_domain: gold_dim_req.req_domain
       ts_baseline: gold_dim_ts.ts_baseline
-      tr_my_sf: fact_tc_tr_ts_req.tr_my_sf
+      tr_my_sf: fact_tc_tr_ts_req.tr_mysf
     row: 0
     col: 18
     width: 6
@@ -94,14 +94,14 @@
     type: looker_column
     fields:
       - gold_dim_req.req_domain
-      - gold_dim_req.count_requirements
-      - gold_dim_req.count_covered_requirements
+      - gold_dim_req.requirement_count
+      - gold_dim_req.covered_requirement_count
       - tbl_cb_sdv_raw_tc_v2.count_test_cases
-    sorts: [gold_dim_req.count_requirements desc]
+    sorts: [gold_dim_req.requirement_count desc]
     listen:
       req_domain: gold_dim_req.req_domain
       ts_baseline: gold_dim_ts.ts_baseline
-      tr_my_sf: fact_tc_tr_ts_req.tr_my_sf
+      tr_my_sf: fact_tc_tr_ts_req.tr_mysf
     row: 4
     col: 0
     width: 12
@@ -121,7 +121,7 @@
     listen:
       req_domain: gold_dim_req.req_domain
       ts_baseline: gold_dim_ts.ts_baseline
-      tr_my_sf: fact_tc_tr_ts_req.tr_my_sf
+      tr_my_sf: fact_tc_tr_ts_req.tr_mysf
     row: 4
     col: 12
     width: 12

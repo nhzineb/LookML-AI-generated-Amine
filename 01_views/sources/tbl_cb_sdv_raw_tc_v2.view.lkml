@@ -703,6 +703,18 @@ view: tbl_cb_sdv_raw_tc_v2 {
     description: "Milestone or release from which the Test Case is obsolete."
   }
 
+  dimension: verifies_name {
+    type: string
+    sql: ARRAY_TO_STRING(${TABLE}.Verifies_Name, ', ') ;;
+    description: "Names of requirements verified by the Test Case."
+  }
+
+  dimension: verifies_id {
+    hidden: yes
+    sql: ${TABLE}.Verifies_Id ;;
+    description: "Numeric IDs of requirements verified by the Test Case."
+  }
+
   dimension: mysf {
     type: string
     sql: ARRAY_TO_STRING(${TABLE}.MySF, ', ') ;;

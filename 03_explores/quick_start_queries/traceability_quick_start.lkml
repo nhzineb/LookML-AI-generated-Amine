@@ -13,12 +13,12 @@ explore: +traceability {
       gold_dim_req.req_asil
     ]
     measures: [
-      gold_dim_req.count_requirements,
-      gold_dim_req.count_covered_requirements,
+      gold_dim_req.requirement_count,
+      gold_dim_req.covered_requirement_count,
       gold_dim_req.requirement_test_coverage_rate,
-      gold_dim_fact_req_tc.count_covered_test_cases
+      gold_dim_fact_req_tc.distinct_tc_count
     ]
-    sorts: [gold_dim_req.count_requirements: desc]
+    sorts: [gold_dim_req.requirement_count: desc]
   }
 
   query: test_execution_verdict_by_testset_baseline {
@@ -26,11 +26,11 @@ explore: +traceability {
     description: "Analyzes Test Run execution progress and Pass/Fail verdicts by Test Set Baseline and TR MySF."
     dimensions: [
       gold_dim_ts.ts_baseline,
-      fact_tc_tr_ts_req.tr_my_sf,
+      fact_tc_tr_ts_req.tr_mysf,
       tbl_cb_sdv_raw_tr_v2.normalized_result
     ]
     measures: [
-      gold_dim_ts.count_test_sets,
+      gold_dim_ts.test_set_count,
       tbl_cb_sdv_raw_tr_v2.count_test_runs,
       tbl_cb_sdv_raw_tr_v2.count_executed_test_runs,
       tbl_cb_sdv_raw_tr_v2.count_passed_test_runs,
