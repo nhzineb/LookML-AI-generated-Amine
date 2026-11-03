@@ -256,10 +256,10 @@ view: +gold_dim_req {
     value_format_name: decimal_0
   }
 
-  dimension: req_created_week {
-    label: "Created ISO Week"
-    group_label: "7. Audit & Lifecycle"
-  }
+#  dimension: req_created_week {
+  #  label: "Created ISO Week"
+ #   group_label: "7. Audit & Lifecycle"
+ # }
 
   # ---------------------------------------------------------------------------
   # 3. MEASURES (Rule 5, 6, 7, 8 & LAMS F3)

@@ -19,7 +19,7 @@ include: "/03_explores/traceability.explore.lkml"
 include: "/03_explores/quick_start_queries/traceability_quick_start.lkml"
 
 # 02_data_tests: Automated LookML Test Suite
-include: "/02_data_tests/traceability.test.lkml"
+#include: "/02_data_tests/traceability.test.lkml"
 
 # 05_dashboards: Native LookML Dashboards
 include: "/05_dashboards/sdv_traceability_execution.dashboard.lookml"

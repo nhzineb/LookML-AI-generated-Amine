@@ -5,7 +5,7 @@ project_name: "ampere_sdv_analytics"
 # =============================================================================
 
 constant: CONNECTION_NAME {
-  value: "bigquery_ampere_sdv"
+  value: "thelook-ecommerce-connection"
   export: override_optional
 }
 

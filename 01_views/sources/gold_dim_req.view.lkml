@@ -311,9 +311,9 @@ view: gold_dim_req {
     description: "Software release IDs associated with the Requirement."
   }
 
-  dimension: req_created_week {
-    type: string
-    sql: ${TABLE}.Req_CreatedWeek ;;
-    description: "ISO creation week string of the Requirement (YYYY-Wxx)."
-  }
+ # dimension: req_created_week {
+  #  type: string
+  #  sql: ${TABLE}.Req_CreatedWeek ;;
+  #  description: "ISO creation week string of the Requirement (YYYY-Wxx)."
+  #}
 }
