@@ -2,7 +2,7 @@ include: "/01_views/sources/gold_dim_fact_req_tc.view.lkml"
 
 # =============================================================================
 # REFINEMENT VIEW: +gold_dim_fact_req_tc (FACT_Requirement_TestCase)
-# Functional Order: Keys -> Dimensions -> Measures -> Filters -> Sets
+# Functional Order: Keys -> Dimensions -> Filters -> Measures -> Sets
 # =============================================================================
 
 view: +gold_dim_fact_req_tc {
@@ -66,7 +66,27 @@ view: +gold_dim_fact_req_tc {
   }
 
   # ---------------------------------------------------------------------------
-  # 3. MEASURES (Rule 5, 6, 7, 8 & LAMS F3)
+  # 3. ZERO-FANOUT ARRAY FILTERS
+  # ---------------------------------------------------------------------------
+
+  filter: req_mysf_any {
+    type: string
+    label: "Filter: Bridge Requirement MySF (Array Item)"
+    group_label: "1. Coverage Status & Scope"
+    description: "Zero-fanout correlated EXISTS filter on Req_MySF array in gold_dim_fact_req_tc."
+    sql: EXISTS (SELECT 1 FROM UNNEST(${req_mysf_list}) AS x WHERE {% condition req_mysf_any %} x {% endcondition %}) ;;
+  }
+
+  filter: req_baseline_any {
+    type: string
+    label: "Filter: Bridge Requirement Baseline (Array Item)"
+    group_label: "1. Coverage Status & Scope"
+    description: "Zero-fanout correlated EXISTS filter on Req_Baseline array in gold_dim_fact_req_tc."
+    sql: EXISTS (SELECT 1 FROM UNNEST(${req_baseline_list}) AS x WHERE {% condition req_baseline_any %} x {% endcondition %}) ;;
+  }
+
+  # ---------------------------------------------------------------------------
+  # 4. MEASURES (Rule 5, 6, 7, 8 & LAMS F3)
   # ---------------------------------------------------------------------------
 
   measure: req_tc_link_count {
@@ -97,6 +117,17 @@ view: +gold_dim_fact_req_tc {
     filters: [is_req_covered: "yes"]
     value_format_name: decimal_0
     description: "Count of distinct Requirements that have at least one covering Test Case."
+    drill_fields: [detail*]
+  }
+
+  measure: uncovered_distinct_req_count {
+    label: "Uncovered Requirements (Bridge)"
+    group_label: "Horizontal Traceability Metrics"
+    type: count_distinct
+    sql: ${pk2_req_id} ;;
+    filters: [is_req_covered: "no"]
+    value_format_name: decimal_0
+    description: "Count of distinct Requirements in the bridge with no covering Test Case."
     drill_fields: [detail*]
   }
 

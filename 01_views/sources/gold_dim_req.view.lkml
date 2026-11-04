@@ -311,9 +311,82 @@ view: gold_dim_req {
     description: "Software release IDs associated with the Requirement."
   }
 
-  dimension: req_created_week {
+  dimension: req_created_iso_week {
     type: string
     sql: ${TABLE}.Req_CreatedWeek ;;
     description: "ISO creation week string of the Requirement (YYYY-Wxx)."
+  }
+
+  # Hidden raw ARRAY dimensions for zero-fanout EXISTS filtering and ARRAY_LENGTH calculations
+  dimension: req_mysf_list {
+    hidden: yes
+    description: "Raw ARRAY column Req_MySF for UNNEST EXISTS filtering."
+    sql: ${TABLE}.Req_MySF ;;
+  }
+
+  dimension: req_baseline_list {
+    hidden: yes
+    description: "Raw ARRAY column Req_Baseline for UNNEST EXISTS filtering."
+    sql: ${TABLE}.Req_Baseline ;;
+  }
+
+  dimension: req_engineering_level_list {
+    hidden: yes
+    description: "Raw ARRAY column Req_Engineering_Level for UNNEST EXISTS filtering."
+    sql: ${TABLE}.Req_Engineering_Level ;;
+  }
+
+  dimension: req_regulation_list {
+    hidden: yes
+    description: "Raw ARRAY column Req_Regulation for UNNEST EXISTS filtering."
+    sql: ${TABLE}.Req_Regulation ;;
+  }
+
+  dimension: req_allocation_list {
+    hidden: yes
+    description: "Raw ARRAY column Req_Allocation for UNNEST EXISTS filtering."
+    sql: ${TABLE}.Req_Allocation ;;
+  }
+
+  dimension: req_validation_teams_list {
+    hidden: yes
+    description: "Raw ARRAY column Req_Validation_Teams for UNNEST EXISTS filtering."
+    sql: ${TABLE}.Req_Validation_Teams ;;
+  }
+
+  dimension: req_supplier_list {
+    hidden: yes
+    description: "Raw ARRAY column Req_Supplier for UNNEST EXISTS filtering."
+    sql: ${TABLE}.Req_Supplier ;;
+  }
+
+  dimension: req_feature_cbid_list {
+    hidden: yes
+    description: "Raw ARRAY column Req_Feature_CBId for UNNEST EXISTS filtering and ARRAY_LENGTH."
+    sql: ${TABLE}.Req_Feature_CBId ;;
+  }
+
+  dimension: req_requirement_parent_id_list {
+    hidden: yes
+    description: "Raw ARRAY column Req_Requirement_Parent_Id for UNNEST EXISTS filtering and ARRAY_LENGTH."
+    sql: ${TABLE}.Req_Requirement_Parent_Id ;;
+  }
+
+  dimension: req_sw_components_list {
+    hidden: yes
+    description: "Raw ARRAY column Req_SW_Components for UNNEST EXISTS filtering and ARRAY_LENGTH."
+    sql: ${TABLE}.Req_SW_Components ;;
+  }
+
+  dimension: req_bench_type_list {
+    hidden: yes
+    description: "Raw ARRAY column Req_Bench_Type for UNNEST EXISTS filtering and ARRAY_LENGTH."
+    sql: ${TABLE}.Req_Bench_Type ;;
+  }
+
+  dimension: req_test_cases_list {
+    hidden: yes
+    description: "Raw ARRAY column Req_Test_Cases for UNNEST EXISTS filtering and ARRAY_LENGTH."
+    sql: ${TABLE}.Req_Test_Cases ;;
   }
 }

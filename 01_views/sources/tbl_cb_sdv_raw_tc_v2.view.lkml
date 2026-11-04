@@ -750,4 +750,29 @@ view: tbl_cb_sdv_raw_tc_v2 {
     sql: ARRAY_TO_STRING(${TABLE}.DUT_Variants, ', ') ;;
     description: "Device Under Test (DUT) variants applicable to the Test Case."
   }
+
+  # Hidden raw ARRAY dimensions for zero-fanout EXISTS filtering and ARRAY_LENGTH calculations
+  dimension: bench_type_list {
+    hidden: yes
+    description: "Raw ARRAY column Bench_Type for UNNEST EXISTS filtering and ARRAY_LENGTH."
+    sql: ${TABLE}.Bench_Type ;;
+  }
+
+  dimension: feature_id_list {
+    hidden: yes
+    description: "Raw ARRAY column Feature_Id for UNNEST EXISTS filtering and ARRAY_LENGTH."
+    sql: ${TABLE}.Feature_Id ;;
+  }
+
+  dimension: validation_teams_list {
+    hidden: yes
+    description: "Raw ARRAY column Validation_Teams for UNNEST EXISTS filtering."
+    sql: ${TABLE}.Validation_Teams ;;
+  }
+
+  dimension: mysf_list {
+    hidden: yes
+    description: "Raw ARRAY column MySF for UNNEST EXISTS filtering."
+    sql: ${TABLE}.MySF ;;
+  }
 }

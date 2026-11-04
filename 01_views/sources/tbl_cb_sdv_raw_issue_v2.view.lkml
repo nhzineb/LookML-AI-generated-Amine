@@ -152,4 +152,17 @@ view: tbl_cb_sdv_raw_issue_v2 {
     sql: ${TABLE}.Project_Key ;;
     description: "Jira project key prefix hosting the Issue."
   }
+
+  # Hidden raw ARRAY dimensions for zero-fanout EXISTS filtering
+  dimension: labels_list {
+    hidden: yes
+    description: "Raw ARRAY column Labels on Issue for UNNEST EXISTS filtering."
+    sql: ${TABLE}.Labels ;;
+  }
+
+  dimension: fix_versions_list {
+    hidden: yes
+    description: "Raw ARRAY column Fix_Versions on Issue for UNNEST EXISTS filtering."
+    sql: ${TABLE}.Fix_Versions ;;
+  }
 }

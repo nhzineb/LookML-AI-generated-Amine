@@ -278,4 +278,65 @@ view: gold_dim_ts {
     sql: ARRAY_TO_STRING(${TABLE}.TS_Other_Releases, ', ') ;;
     description: "Other ECU software releases associated with the Test Set."
   }
+
+  # Hidden raw ARRAY dimensions for zero-fanout EXISTS filtering and ARRAY_LENGTH calculations
+  dimension: ts_mysf_list {
+    hidden: yes
+    description: "Raw ARRAY column TS_MySF for UNNEST EXISTS filtering."
+    sql: ${TABLE}.TS_MySF ;;
+  }
+
+  dimension: ts_bench_type_list {
+    hidden: yes
+    description: "Raw ARRAY column TS_Bench_Type for UNNEST EXISTS filtering and ARRAY_LENGTH."
+    sql: ${TABLE}.TS_Bench_Type ;;
+  }
+
+  dimension: ts_validation_team_list {
+    hidden: yes
+    description: "Raw ARRAY column TS_Validation_Team for UNNEST EXISTS filtering."
+    sql: ${TABLE}.TS_Validation_Team ;;
+  }
+
+  dimension: ts_vehicle_project_list {
+    hidden: yes
+    description: "Raw ARRAY column TS_Vehicle_Project for UNNEST EXISTS filtering."
+    sql: ${TABLE}.TS_Vehicle_Project ;;
+  }
+
+  dimension: ts_pcu_releases_list {
+    hidden: yes
+    description: "Raw ARRAY column TS_PCU_Releases for UNNEST EXISTS filtering."
+    sql: ${TABLE}.TS_PCU_Releases ;;
+  }
+
+  dimension: ts_piu_releases_list {
+    hidden: yes
+    description: "Raw ARRAY column TS_PIU_Releases for UNNEST EXISTS filtering."
+    sql: ${TABLE}.TS_PIU_Releases ;;
+  }
+
+  dimension: ts_ivc_releases_list {
+    hidden: yes
+    description: "Raw ARRAY column TS_IVC_Releases for UNNEST EXISTS filtering."
+    sql: ${TABLE}.TS_IVC_Releases ;;
+  }
+
+  dimension: ts_cdc_releases_list {
+    hidden: yes
+    description: "Raw ARRAY column TS_CDC_Releases for UNNEST EXISTS filtering."
+    sql: ${TABLE}.TS_CDC_Releases ;;
+  }
+
+  dimension: ts_other_releases_list {
+    hidden: yes
+    description: "Raw ARRAY column TS_Other_Releases for UNNEST EXISTS filtering."
+    sql: ${TABLE}.TS_Other_Releases ;;
+  }
+
+  dimension: ts_test_cases_id_list {
+    hidden: yes
+    description: "Raw ARRAY column TS_Test_Cases_Id for UNNEST EXISTS filtering and ARRAY_LENGTH."
+    sql: ${TABLE}.TS_Test_Cases_Id ;;
+  }
 }

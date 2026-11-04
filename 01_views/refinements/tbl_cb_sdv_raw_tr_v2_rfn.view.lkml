@@ -21,6 +21,13 @@ view: +tbl_cb_sdv_raw_tr_v2 {
     }
   }
 
+  dimension: primary_test_case_id {
+    hidden: yes
+    type: number
+    sql: ${TABLE}.Test_Cases[SAFE_OFFSET(0)] ;;
+    description: "Primary Test Case ID executed in the Test Run for N:1 join."
+  }
+
   dimension: name {
     label: "Test Run Name"
     description: "Short title/summary of the Test Run"
@@ -54,7 +61,9 @@ view: +tbl_cb_sdv_raw_tr_v2 {
 
   dimension: running_time {
     label: "Actual Running Time"
-    description: "Actual execution duration of the Test Run"
+    description: "Actual execution duration of the Test Run mapped from TR_Measure / Estimated_Duration"
+    type: number
+    sql: COALESCE(${tr_measure}, ${estimated_duration}) ;;
     value_format_name: decimal_1
   }
 
@@ -65,14 +74,14 @@ view: +tbl_cb_sdv_raw_tr_v2 {
   dimension: normalized_result {
     group_label: "Execution Verdict Flags"
     label: "Normalized Result"
-    description: "Standardized execution verdict bucket (Passed, Failed, Blocked, Not Run / Other)"
+    description: "Standardized execution verdict bucket (Passed, Failed, Blocked, Not Executed)"
     type: string
     sql:
       CASE
-        WHEN UPPER(${result}) IN ('PASSED', 'PASS', 'OK') THEN 'Passed'
-        WHEN UPPER(${result}) IN ('FAILED', 'FAIL', 'KO', 'NOK') THEN 'Failed'
-        WHEN UPPER(${result}) IN ('BLOCKED', 'BLOCK') THEN 'Blocked'
-        ELSE 'Not Run / Other'
+        WHEN UPPER(TRIM(${result})) IN ('PASSED', 'PASS', 'OK') THEN 'Passed'
+        WHEN UPPER(TRIM(${result})) IN ('FAILED', 'FAIL', 'KO', 'NOK') THEN 'Failed'
+        WHEN UPPER(TRIM(${result})) IN ('BLOCKED', 'BLOCK') THEN 'Blocked'
+        ELSE 'Not Executed'
       END ;;
   }
 
@@ -81,7 +90,7 @@ view: +tbl_cb_sdv_raw_tr_v2 {
     label: "Is Passed"
     description: "True when the Test Run execution verdict is Passed"
     type: yesno
-    sql: UPPER(${result}) IN ('PASSED', 'PASS', 'OK') ;;
+    sql: UPPER(TRIM(${result})) IN ('PASSED', 'PASS', 'OK') ;;
   }
 
   dimension: is_failed {
@@ -89,7 +98,7 @@ view: +tbl_cb_sdv_raw_tr_v2 {
     label: "Is Failed"
     description: "True when the Test Run execution verdict is Failed"
     type: yesno
-    sql: UPPER(${result}) IN ('FAILED', 'FAIL', 'KO', 'NOK') ;;
+    sql: UPPER(TRIM(${result})) IN ('FAILED', 'FAIL', 'KO', 'NOK') ;;
   }
 
   dimension: is_blocked {
@@ -97,15 +106,23 @@ view: +tbl_cb_sdv_raw_tr_v2 {
     label: "Is Blocked"
     description: "True when the Test Run execution verdict is Blocked"
     type: yesno
-    sql: UPPER(${result}) IN ('BLOCKED', 'BLOCK') ;;
+    sql: UPPER(TRIM(${result})) IN ('BLOCKED', 'BLOCK') ;;
   }
 
   dimension: is_executed {
     group_label: "Execution Verdict Flags"
-    label: "Is Executed (Passed or Failed)"
+    label: "Is Executed (Passed, Failed, or Blocked)"
     description: "True when the Test Run finished with an active verdict (Passed, Failed, or Blocked)"
     type: yesno
-    sql: UPPER(${result}) IN ('PASSED', 'PASS', 'OK', 'FAILED', 'FAIL', 'KO', 'NOK', 'BLOCKED', 'BLOCK') ;;
+    sql: UPPER(TRIM(${result})) IN ('PASSED', 'PASS', 'OK', 'FAILED', 'FAIL', 'KO', 'NOK', 'BLOCKED', 'BLOCK') ;;
+  }
+
+  dimension: is_not_executed {
+    group_label: "Execution Verdict Flags"
+    label: "Is Not Executed"
+    description: "True when the Test Run has not yet produced an active Passed, Failed, or Blocked verdict"
+    type: yesno
+    sql: NOT (${is_executed}) ;;
   }
 
   dimension: has_reported_bug {
@@ -117,7 +134,27 @@ view: +tbl_cb_sdv_raw_tr_v2 {
   }
 
   # =======================================================================
-  # 3. MEASURES (KPIs)
+  # 3. ZERO-FANOUT ARRAY FILTERS (EXISTS UNNEST)
+  # =======================================================================
+
+  filter: bench_type_any {
+    type: string
+    group_label: "Execution Verdict Flags"
+    label: "Filter: TR Bench Type (Array Item)"
+    description: "Zero-fanout correlated EXISTS filter on Test Run Bench_Type array."
+    sql: EXISTS (SELECT 1 FROM UNNEST(${bench_type_list}) AS x WHERE {% condition bench_type_any %} x {% endcondition %}) ;;
+  }
+
+  filter: mysf_any {
+    type: string
+    group_label: "Execution Verdict Flags"
+    label: "Filter: TR MySF (Array Item)"
+    description: "Zero-fanout correlated EXISTS filter on Test Run MySF array."
+    sql: EXISTS (SELECT 1 FROM UNNEST(${mysf_list}) AS x WHERE {% condition mysf_any %} x {% endcondition %}) ;;
+  }
+
+  # =======================================================================
+  # 4. MEASURES (KPIs)
   # =======================================================================
 
   measure: count_test_runs {
@@ -173,10 +210,21 @@ view: +tbl_cb_sdv_raw_tr_v2 {
     drill_fields: [tr_default_drill*]
   }
 
+  measure: count_not_executed_test_runs {
+    group_label: "Execution Verdict Metrics"
+    label: "Not Executed Test Runs"
+    description: "Count of Test Runs that are Not Executed"
+    type: count_distinct
+    sql: ${id} ;;
+    filters: [is_not_executed: "yes"]
+    value_format_name: decimal_0
+    drill_fields: [tr_default_drill*]
+  }
+
   measure: pass_rate {
     group_label: "Execution Verdict Metrics"
     label: "Test Run Pass Rate (%)"
-    description: "Percentage of executed Test Runs that passed"
+    description: "Percentage of executed Test Runs (Passed + Failed + Blocked) that passed"
     type: number
     sql: SAFE_DIVIDE(${count_passed_test_runs}, ${count_executed_test_runs}) ;;
     value_format_name: percent_1
@@ -203,7 +251,7 @@ view: +tbl_cb_sdv_raw_tr_v2 {
   }
 
   # =======================================================================
-  # 4. FIELD SETS
+  # 5. FIELD SETS
   # =======================================================================
 
   set: tr_default_drill {
@@ -212,6 +260,7 @@ view: +tbl_cb_sdv_raw_tr_v2 {
       name,
       status,
       result,
+      normalized_result,
       domain,
       sub_domain,
       assigned_to,

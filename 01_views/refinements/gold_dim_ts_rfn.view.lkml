@@ -2,7 +2,7 @@ include: "/01_views/sources/gold_dim_ts.view.lkml"
 
 # =============================================================================
 # REFINEMENT VIEW: +gold_dim_ts (TestSet_View)
-# Functional Order: Keys -> Dimensions -> Measures -> Filters -> Sets
+# Functional Order: Keys -> Dimensions -> Filters -> Measures -> Sets
 # =============================================================================
 
 view: +gold_dim_ts {
@@ -15,6 +15,10 @@ view: +gold_dim_ts {
   dimension: ts_id {
     label: "[Test Set ID]"
     group_label: "1. Identity & Hierarchy"
+    link: {
+      label: "Open Test Set #{{ value }} in Codebeamer"
+      url: "@{codebeamer_base_url}/item/{{ value }}"
+    }
   }
 
   dimension: ts_name {
@@ -41,6 +45,22 @@ view: +gold_dim_ts {
     group_label: "2. Classification & Status"
   }
 
+  dimension: is_ts_generic {
+    label: "Is Generic Test Set (PVAL)"
+    group_label: "2. Classification & Status"
+    type: yesno
+    sql: LOWER(TRIM(${ts_type})) = 'generic' ;;
+    description: "True when TS_Type = 'Generic' (Board 2 Section 3)."
+  }
+
+  dimension: is_ts_execution {
+    label: "Is Execution Test Set (Auto / Manual)"
+    group_label: "2. Classification & Status"
+    type: yesno
+    sql: LOWER(TRIM(${ts_type})) IN ('automatic execution', 'manual execution') ;;
+    description: "True when TS_Type IN ('Automatic execution', 'Manual execution') (Board 2 Section 4)."
+  }
+
   dimension: ts_status {
     label: "Test Set Status"
     group_label: "2. Classification & Status"
@@ -59,6 +79,27 @@ view: +gold_dim_ts {
   dimension: ts_baseline {
     label: "Consolidated Baseline"
     group_label: "3. Baselines, MySF & Releases"
+  }
+
+  dimension: extracted_ts_bl {
+    label: "Extracted Baseline Code (BL)"
+    group_label: "3. Baselines, MySF & Releases"
+    type: string
+    sql: COALESCE(REGEXP_EXTRACT(UPPER(IFNULL(${ts_baseline}, '')), r'(BL[0-9]{1,2}(?:[._-][0-9]{1,2})?)'), ${ts_baseline}) ;;
+    description: "Normalized BL token extracted via regex r'(BL[0-9]{1,2}(?:[._-][0-9]{1,2})?)' (Board 3)."
+  }
+
+  dimension: ts_bl_family {
+    label: "Baseline Family (BL6 / BL7)"
+    group_label: "3. Baselines, MySF & Releases"
+    type: string
+    sql:
+      CASE
+        WHEN REGEXP_CONTAINS(UPPER(IFNULL(${ts_baseline}, '')), r'\bBL0*6(?:[._-]0+)?\b') THEN 'BL6'
+        WHEN REGEXP_CONTAINS(UPPER(IFNULL(${ts_baseline}, '')), r'\bBL0*7(?:[._-][0-9]+)?\b') THEN 'BL7'
+        ELSE 'OTHER'
+      END ;;
+    description: "Classifies Test Set baseline into BL6, BL7, or OTHER (Board 3)."
   }
 
   dimension: bl_source {
@@ -189,16 +230,100 @@ view: +gold_dim_ts {
   }
 
   # ---------------------------------------------------------------------------
-  # 3. MEASURES (Rule 5, 6, 7, 8 & LAMS F3)
+  # 3. ZERO-FANOUT ARRAY FILTERS (EXISTS UNNEST)
+  # ---------------------------------------------------------------------------
+
+  filter: ts_mysf_any {
+    type: string
+    label: "Filter: Test Set MySF (Array Item)"
+    group_label: "3. Baselines, MySF & Releases"
+    description: "Zero-fanout correlated EXISTS filter on TS_MySF array elements."
+    sql: EXISTS (SELECT 1 FROM UNNEST(${ts_mysf_list}) AS x WHERE {% condition ts_mysf_any %} x {% endcondition %}) ;;
+  }
+
+  filter: ts_bench_type_any {
+    type: string
+    label: "Filter: Test Set Bench Type (Array Item)"
+    group_label: "4. Ownership, Bench & Scope"
+    description: "Zero-fanout correlated EXISTS filter on TS_Bench_Type array elements."
+    sql: EXISTS (SELECT 1 FROM UNNEST(${ts_bench_type_list}) AS x WHERE {% condition ts_bench_type_any %} x {% endcondition %}) ;;
+  }
+
+  filter: ts_validation_team_any {
+    type: string
+    label: "Filter: Test Set Validation Team (Array Item)"
+    group_label: "4. Ownership, Bench & Scope"
+    description: "Zero-fanout correlated EXISTS filter on TS_Validation_Team array elements."
+    sql: EXISTS (SELECT 1 FROM UNNEST(${ts_validation_team_list}) AS x WHERE {% condition ts_validation_team_any %} x {% endcondition %}) ;;
+  }
+
+  filter: ts_vehicle_project_any {
+    type: string
+    label: "Filter: Test Set Vehicle Project (Array Item)"
+    group_label: "3. Baselines, MySF & Releases"
+    description: "Zero-fanout correlated EXISTS filter on TS_Vehicle_Project array elements."
+    sql: EXISTS (SELECT 1 FROM UNNEST(${ts_vehicle_project_list}) AS x WHERE {% condition ts_vehicle_project_any %} x {% endcondition %}) ;;
+  }
+
+  filter: ts_pcu_releases_any {
+    type: string
+    label: "Filter: PCU Release (Array Item)"
+    group_label: "3. Baselines, MySF & Releases"
+    description: "Zero-fanout correlated EXISTS filter on TS_PCU_Releases array elements."
+    sql: EXISTS (SELECT 1 FROM UNNEST(${ts_pcu_releases_list}) AS x WHERE {% condition ts_pcu_releases_any %} x {% endcondition %}) ;;
+  }
+
+  filter: ts_piu_releases_any {
+    type: string
+    label: "Filter: PIU Release (Array Item)"
+    group_label: "3. Baselines, MySF & Releases"
+    description: "Zero-fanout correlated EXISTS filter on TS_PIU_Releases array elements."
+    sql: EXISTS (SELECT 1 FROM UNNEST(${ts_piu_releases_list}) AS x WHERE {% condition ts_piu_releases_any %} x {% endcondition %}) ;;
+  }
+
+  filter: ts_ivc_releases_any {
+    type: string
+    label: "Filter: IVC Release (Array Item)"
+    group_label: "3. Baselines, MySF & Releases"
+    description: "Zero-fanout correlated EXISTS filter on TS_IVC_Releases array elements."
+    sql: EXISTS (SELECT 1 FROM UNNEST(${ts_ivc_releases_list}) AS x WHERE {% condition ts_ivc_releases_any %} x {% endcondition %}) ;;
+  }
+
+  filter: ts_cdc_releases_any {
+    type: string
+    label: "Filter: CDC Release (Array Item)"
+    group_label: "3. Baselines, MySF & Releases"
+    description: "Zero-fanout correlated EXISTS filter on TS_CDC_Releases array elements."
+    sql: EXISTS (SELECT 1 FROM UNNEST(${ts_cdc_releases_list}) AS x WHERE {% condition ts_cdc_releases_any %} x {% endcondition %}) ;;
+  }
+
+  filter: ts_other_releases_any {
+    type: string
+    label: "Filter: Other ECU Release (Array Item)"
+    group_label: "3. Baselines, MySF & Releases"
+    description: "Zero-fanout correlated EXISTS filter on TS_Other_Releases array elements."
+    sql: EXISTS (SELECT 1 FROM UNNEST(${ts_other_releases_list}) AS x WHERE {% condition ts_other_releases_any %} x {% endcondition %}) ;;
+  }
+
+  filter: ts_test_cases_id_any {
+    type: string
+    label: "Filter: Included Test Case ID (Array Item)"
+    group_label: "4. Ownership, Bench & Scope"
+    description: "Zero-fanout correlated EXISTS filter on TS_Test_Cases_Id array elements."
+    sql: EXISTS (SELECT 1 FROM UNNEST(${ts_test_cases_id_list}) AS x WHERE {% condition ts_test_cases_id_any %} CAST(x AS STRING) {% endcondition %}) ;;
+  }
+
+  # ---------------------------------------------------------------------------
+  # 4. MEASURES (COUNT_DISTINCT on TS_Id)
   # ---------------------------------------------------------------------------
 
   measure: test_set_count {
     label: "Total Test Sets"
     group_label: "Test Set Metrics"
-    type: count
-    filters: [pk1_ts_id: "NOT NULL"]
+    type: count_distinct
+    sql: ${pk1_ts_id} ;;
     value_format_name: decimal_0
-    description: "Total count of unique Test Sets in gold_dim_ts."
+    description: "Total count of unique Test Sets (COUNT_DISTINCT(TS_Id)) in gold_dim_ts."
     drill_fields: [detail*]
     link: {
       label: "Test Sets by Baseline (Column)"
@@ -208,6 +333,28 @@ view: +gold_dim_ts {
       label: "Test Sets by Domain (Donut)"
       url: "@{DRILL_PIE_VIZ}{{ link }}&fields=gold_dim_ts.ts_domain,gold_dim_ts.test_set_count&sorts=gold_dim_ts.test_set_count+desc&limit=10&toggle=vis"
     }
+  }
+
+  measure: generic_test_set_count {
+    label: "Generic Test Sets"
+    group_label: "Test Set Metrics"
+    type: count_distinct
+    sql: ${pk1_ts_id} ;;
+    filters: [is_ts_generic: "yes"]
+    value_format_name: decimal_0
+    description: "Distinct count of Generic Test Sets (TS_Type = 'Generic')."
+    drill_fields: [detail*]
+  }
+
+  measure: execution_test_set_count {
+    label: "Execution Test Sets (Auto / Manual)"
+    group_label: "Test Set Metrics"
+    type: count_distinct
+    sql: ${pk1_ts_id} ;;
+    filters: [is_ts_execution: "yes"]
+    value_format_name: decimal_0
+    description: "Distinct count of Execution Test Sets (Automatic or Manual execution)."
+    drill_fields: [detail*]
   }
 
   measure: ts_estimated_duration_total {
@@ -228,6 +375,7 @@ view: +gold_dim_ts {
     fields: [
       ts_id,
       ts_name,
+      ts_type,
       ts_status,
       ts_domain,
       ts_baseline,

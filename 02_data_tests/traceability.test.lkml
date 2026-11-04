@@ -1,10 +1,19 @@
 # -------------------------------------------------------------------------
-# LookML Data Tests for Explore: traceability
+# LookML Data Tests for SDV Explores:
+#   - traceability
+#   - requirements_traceability (Board 1, 2.1, 4)
+#   - tc_horizontal_traceability (Board 2)
+#   - ts_pass_rate_by_sw_version (Board 3)
+#   - req_pass_rate_by_bench (Board 4)
 # -------------------------------------------------------------------------
 include: "/03_explores/traceability.explore.lkml"
+include: "/03_explores/requirements_traceability.explore.lkml"
+include: "/03_explores/tc_horizontal_traceability.explore.lkml"
+include: "/03_explores/ts_pass_rate_by_sw_version.explore.lkml"
+include: "/03_explores/req_pass_rate_by_bench.explore.lkml"
 
 test: gold_dim_req_pk_not_null {
-  explore_source: traceability {
+  explore_source: requirements_traceability {
     column: req_id { field: gold_dim_req.req_id }
     filters: [gold_dim_req.req_id: "NULL"]
     limit: 1
@@ -26,23 +35,49 @@ test: gold_dim_ts_pk_not_null {
 }
 
 test: req_coverage_rate_within_valid_bounds {
-  explore_source: traceability {
+  explore_source: requirements_traceability {
     column: req_domain { field: gold_dim_req.req_domain }
-    column: coverage_rate { field: gold_dim_req.requirement_test_coverage_rate }
+    column: coverage_rate { field: dt_req_coverage_and_validation.horizontal_tc_coverage_rate }
   }
   assert: coverage_rate_between_0_and_1 {
-    expression: ${gold_dim_req.requirement_test_coverage_rate} >= 0 AND ${gold_dim_req.requirement_test_coverage_rate} <= 1 ;;
+    expression:
+      is_null(${dt_req_coverage_and_validation.horizontal_tc_coverage_rate})
+      OR (${dt_req_coverage_and_validation.horizontal_tc_coverage_rate} >= 0 AND ${dt_req_coverage_and_validation.horizontal_tc_coverage_rate} <= 1) ;;
   }
 }
 
-test: test_run_pass_rate_within_valid_bounds {
-  explore_source: traceability {
-    column: ts_baseline { field: gold_dim_ts.ts_baseline }
-    column: pass_rate { field: tbl_cb_sdv_raw_tr_v2.pass_rate }
+test: tc_execution_pass_rate_within_valid_bounds {
+  explore_source: tc_horizontal_traceability {
+    column: bench_type { field: dt_tc_execution_status.bench_type_ordered }
+    column: pass_rate { field: dt_tc_execution_status.tc_latest_pass_rate }
   }
-  assert: pass_rate_between_0_and_1 {
+  assert: tc_pass_rate_between_0_and_1 {
     expression:
-      is_null(${tbl_cb_sdv_raw_tr_v2.pass_rate})
-      OR (${tbl_cb_sdv_raw_tr_v2.pass_rate} >= 0 AND ${tbl_cb_sdv_raw_tr_v2.pass_rate} <= 1) ;;
+      is_null(${dt_tc_execution_status.tc_latest_pass_rate})
+      OR (${dt_tc_execution_status.tc_latest_pass_rate} >= 0 AND ${dt_tc_execution_status.tc_latest_pass_rate} <= 1) ;;
+  }
+}
+
+test: ts_release_pass_rate_within_valid_bounds {
+  explore_source: ts_pass_rate_by_sw_version {
+    column: bl_family { field: dt_ts_release_execution.bl_family }
+    column: pass_rate { field: dt_ts_release_execution.ts_release_pass_rate }
+  }
+  assert: ts_release_pass_rate_between_0_and_1 {
+    expression:
+      is_null(${dt_ts_release_execution.ts_release_pass_rate})
+      OR (${dt_ts_release_execution.ts_release_pass_rate} >= 0 AND ${dt_ts_release_execution.ts_release_pass_rate} <= 1) ;;
+  }
+}
+
+test: req_bench_pass_rate_within_valid_bounds {
+  explore_source: req_pass_rate_by_bench {
+    column: ts_bench_type { field: dt_req_bench_validation.ts_bench_type }
+    column: pass_rate { field: dt_req_bench_validation.bench_requirement_pass_rate }
+  }
+  assert: req_bench_pass_rate_between_0_and_1 {
+    expression:
+      is_null(${dt_req_bench_validation.bench_requirement_pass_rate})
+      OR (${dt_req_bench_validation.bench_requirement_pass_rate} >= 0 AND ${dt_req_bench_validation.bench_requirement_pass_rate} <= 1) ;;
   }
 }

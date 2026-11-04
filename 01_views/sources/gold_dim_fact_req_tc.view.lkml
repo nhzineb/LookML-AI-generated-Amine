@@ -104,4 +104,17 @@ view: gold_dim_fact_req_tc {
     sql: ARRAY_TO_STRING(${TABLE}.TC_System_Owner, ', ') ;;
     description: "System Owner(s) of the covering Test Case."
   }
+
+  # Hidden raw ARRAY dimensions for zero-fanout EXISTS filtering
+  dimension: req_mysf_list {
+    hidden: yes
+    description: "Raw ARRAY column Req_MySF on bridge for UNNEST EXISTS filtering."
+    sql: ${TABLE}.Req_MySF ;;
+  }
+
+  dimension: req_baseline_list {
+    hidden: yes
+    description: "Raw ARRAY column Req_Baseline on bridge for UNNEST EXISTS filtering."
+    sql: ${TABLE}.Req_Baseline ;;
+  }
 }

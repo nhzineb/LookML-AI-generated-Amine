@@ -743,4 +743,17 @@ view: tbl_cb_sdv_raw_tr_v2 {
     sql: ARRAY_TO_STRING(${TABLE}.DUT_Variants, ', ') ;;
     description: "Device Under Test (DUT) variants used during the Test Run."
   }
+
+  # Hidden raw ARRAY dimensions for zero-fanout EXISTS filtering
+  dimension: bench_type_list {
+    hidden: yes
+    description: "Raw ARRAY column Bench_Type on Test Run for UNNEST EXISTS filtering."
+    sql: ${TABLE}.Bench_Type ;;
+  }
+
+  dimension: mysf_list {
+    hidden: yes
+    description: "Raw ARRAY column MySF on Test Run for UNNEST EXISTS filtering."
+    sql: ${TABLE}.MySF ;;
+  }
 }

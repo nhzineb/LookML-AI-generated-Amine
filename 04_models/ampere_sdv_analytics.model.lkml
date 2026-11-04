@@ -14,8 +14,14 @@ week_start_day: monday
 # 00_adm: Administration & Datagroups
 include: "/00_adm/datagroup/datagroups.lkml"
 
-# 03_explores: Modular Explore & Quick Start Queries
+# 03_explores: Modular Explores for All 4 SDV Generic KPI Dashboard Boards
 include: "/03_explores/traceability.explore.lkml"
+include: "/03_explores/requirements_traceability.explore.lkml"
+include: "/03_explores/tc_horizontal_traceability.explore.lkml"
+include: "/03_explores/req_tc_traceability.explore.lkml"
+include: "/03_explores/ts_pass_rate_by_sw_version.explore.lkml"
+include: "/03_explores/req_pass_rate_by_bench.explore.lkml"
+include: "/03_explores/test_run_issue_analysis.explore.lkml"
 include: "/03_explores/quick_start_queries/traceability_quick_start.lkml"
 
 # 02_data_tests: Automated LookML Test Suite
