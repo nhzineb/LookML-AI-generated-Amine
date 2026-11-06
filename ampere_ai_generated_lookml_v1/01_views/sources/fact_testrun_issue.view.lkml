@@ -94,7 +94,7 @@ view: fact_testrun_issue {
 
   dimension: issue_domain_in_charge {
     type: string
-    sql: ${TABLE}.Issue_Domain_in_Charge ;;
+    sql: ${TABLE}.Issue_Domain_in_charge ;;
     description: "Engineering domain in charge of resolving the Issue."
   }
 
