@@ -1,0 +1,23 @@
+{
+  "Ampere SDV Analytics": "Ampere SDV Analytics",
+  "SDV Traceability": "SDV Traceability",
+  "Requirement": "Requirement",
+  "Test Case": "Test Case",
+  "Test Set": "Test Set",
+  "Test Run": "Test Run",
+  "Issue": "Issue",
+  "Total Requirements": "Total Requirements",
+  "Approved Requirements": "Approved Requirements",
+  "Covered Requirements": "Covered Requirements",
+  "Uncovered Requirements": "Uncovered Requirements",
+  "Horizontal REQ-TC Coverage Rate": "Horizontal REQ-TC Coverage Rate",
+  "Total Test Cases": "Total Test Cases",
+  "Total Test Sets": "Total Test Sets",
+  "Total Test Runs": "Total Test Runs",
+  "Passed Test Runs": "Passed Test Runs",
+  "Failed Test Runs": "Failed Test Runs",
+  "Blocked Test Runs": "Blocked Test Runs",
+  "Test Run Pass Rate": "Test Run Pass Rate",
+  "Total Issues": "Total Issues",
+  "Open Issues": "Open Issues"
+}
