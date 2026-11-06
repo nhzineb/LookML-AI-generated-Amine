@@ -14,23 +14,21 @@ include: "/ampere_ai_generated_lookml_v1/03_explores/req_pass_rate_by_bench.expl
 
 test: gold_dim_req_pk_not_null {
   explore_source: requirements_traceability {
-    column: req_id { field: gold_dim_req.req_id }
+    column: requirement_count { field: gold_dim_req.requirement_count }
     filters: [gold_dim_req.req_id: "NULL"]
-    limit: 1
   }
   assert: req_id_is_never_null {
-    expression: is_null(${gold_dim_req.req_id}) = no ;;
+    expression: ${gold_dim_req.requirement_count} = 0 ;;
   }
 }
 
 test: gold_dim_ts_pk_not_null {
-  explore_source: traceability {
-    column: ts_id { field: gold_dim_ts.ts_id }
+  explore_source: ts_pass_rate_by_sw_version {
+    column: test_set_count { field: gold_dim_ts.test_set_count }
     filters: [gold_dim_ts.ts_id: "NULL"]
-    limit: 1
   }
   assert: ts_id_is_never_null {
-    expression: is_null(${gold_dim_ts.ts_id}) = no ;;
+    expression: ${gold_dim_ts.test_set_count} = 0 ;;
   }
 }
 

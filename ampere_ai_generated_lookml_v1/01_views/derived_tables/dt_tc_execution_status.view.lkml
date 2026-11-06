@@ -143,7 +143,7 @@ view: dt_tc_execution_status {
           MAX(
             IF(
               REGEXP_CONTAINS(
-                LOWER(CONCAT(COALESCE(ARRAY_TO_STRING(iss.Labels, ' '), tri.Issue_Label, ''), ' ', IFNULL(COALESCE(iss.Summary, tri.Issue_Summary), ''), ' ', IFNULL(COALESCE(iss.Issue_Resolution, tri.Issue_Resolution), ''))),
+                LOWER(CONCAT(COALESCE(ARRAY_TO_STRING(iss.Labels, ' '), ARRAY_TO_STRING(tri.Issue_Label, ' '), ''), ' ', IFNULL(COALESCE(iss.Summary, tri.Issue_Summary), ''), ' ', IFNULL(COALESCE(iss.Issue_Resolution, tri.Issue_Resolution), ''))),
                 r'derogat'
               ),
               1,
