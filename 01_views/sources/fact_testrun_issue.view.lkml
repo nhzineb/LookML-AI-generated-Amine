@@ -100,7 +100,7 @@ view: fact_testrun_issue {
 
   dimension: issue_validation_team {
     type: string
-    sql: ${TABLE}.Issue_Validation_Team ;;
+    sql: ARRAY_TO_STRING(${TABLE}.Issue_Validation_Team, ', ') ;;
     description: "Validation team associated with the Issue."
   }
 }
