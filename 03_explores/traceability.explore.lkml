@@ -30,7 +30,6 @@ explore: traceability {
   description: "End-to-end Software-Defined Vehicle (SDV) traceability across Requirements (gold_dim_req), Test Cases (tbl_cb_sdv_raw_tc_v2), Test Sets (gold_dim_ts), Test Runs (tbl_cb_sdv_raw_tr_v2), and Issues (tbl_cb_sdv_raw_issue_v2) with strict N:1 join semantics."
   view_name: fact_tc_tr_ts_req
   view_label: "4. Bridge: TC - TR - TS - Req (fact_tc_tr_ts_req)"
-  persist_with: ampere_sdv_gold_etl_datagroup
 
   # =======================================================================
   # 1. REQUIREMENT & DERIVED REQ COVERAGE / VALIDATION (many_to_one / one_to_one)

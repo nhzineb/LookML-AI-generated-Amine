@@ -73,8 +73,8 @@ view: +gold_dim_fact_req_tc {
     type: string
     label: "Filter: Bridge Requirement MySF (Array Item)"
     group_label: "1. Coverage Status & Scope"
-    description: "Zero-fanout correlated EXISTS filter on Req_MySF array in gold_dim_fact_req_tc."
-    sql: EXISTS (SELECT 1 FROM UNNEST(${req_mysf_list}) AS x WHERE {% condition req_mysf_any %} x {% endcondition %}) ;;
+    description: "Zero-fanout correlated EXISTS filter on Req_MySF array in Fact_Req_TC."
+    sql: EXISTS (SELECT 1 FROM UNNEST(${req_mysf_list}) AS x WHERE {% condition req_mysf_any %} CAST(x AS STRING) {% endcondition %}) ;;
   }
 
   filter: req_baseline_any {

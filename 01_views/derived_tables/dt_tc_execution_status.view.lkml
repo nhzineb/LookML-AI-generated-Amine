@@ -29,17 +29,17 @@ view: dt_tc_execution_status {
         GROUP BY tc.Id
       ),
 
-      -- 2. Linked Requirement rollup per Test Case from gold_dim_fact_req_tc + gold_dim_req
+      -- 2. Linked Requirement rollup per Test Case from Fact_Req_TC + gold_dim_req
       tc_req_links AS (
         SELECT DISTINCT
           b.TC_Id,
           b.Req_Id,
           r.Req_Name,
           r.Req_ASIL,
-          ARRAY_TO_STRING(r.Req_Regulation, ', ') AS req_regulation_str,
+          ARRAY_TO_STRING(r.Req_Regulations, ', ') AS req_regulation_str,
           ARRAY_TO_STRING(r.Req_MySF, ', ') AS req_mysf_str,
           ARRAY_TO_STRING(r.Req_Baseline, ', ') AS req_baseline_str
-        FROM `@{DATASET_NAME}.gold_dim_fact_req_tc` AS b
+        FROM `@{DATASET_NAME}.Fact_Req_TC` AS b
         LEFT JOIN `@{DATASET_NAME}.gold_dim_req` AS r
           ON b.Req_Id = r.Req_Id
         WHERE b.TC_Id IS NOT NULL
@@ -76,7 +76,7 @@ view: dt_tc_execution_status {
           ARRAY_TO_STRING(ts.TS_IVC_Releases, ', ') AS ts_ivc_str,
           ARRAY_TO_STRING(ts.TS_CDC_Releases, ', ') AS ts_cdc_str,
           ARRAY_TO_STRING(ts.TS_Other_Releases, ', ') AS ts_other_str
-        FROM `@{DATASET_NAME}.FACT_TC_TR_TS_REQ` AS f
+        FROM `@{DATASET_NAME}.Fact_TC_TR_TS_Req` AS f
         INNER JOIN `@{DATASET_NAME}.gold_dim_ts` AS ts
           ON f.TS_Id = ts.TS_Id
         WHERE f.TC_Id IS NOT NULL
@@ -106,7 +106,7 @@ view: dt_tc_execution_status {
           f.TC_Id,
           f.TR_Id AS last_tr_id,
           f.TS_Id AS last_ts_id,
-          COALESCE(tr.Completed_At, tr.Created) AS last_tr_run_date,
+          CAST(COALESCE(tr.Completed_At, tr.Created) AS DATETIME) AS last_tr_run_date,
           tr.Result AS last_tr_raw_result,
           CASE
             WHEN UPPER(TRIM(tr.Result)) IN ('PASSED', 'PASS', 'OK') THEN 'Passed'
@@ -114,7 +114,7 @@ view: dt_tc_execution_status {
             WHEN UPPER(TRIM(tr.Result)) IN ('BLOCKED', 'BLOCK') THEN 'Blocked'
             ELSE 'Not executed'
           END AS last_tr_result
-        FROM `@{DATASET_NAME}.FACT_TC_TR_TS_REQ` AS f
+        FROM `@{DATASET_NAME}.Fact_TC_TR_TS_Req` AS f
         INNER JOIN `@{DATASET_NAME}.TBL_CB_SDV_Raw_TR_V2` AS tr
           ON f.TR_Id = tr.Id
         WHERE f.TC_Id IS NOT NULL
@@ -136,25 +136,25 @@ view: dt_tc_execution_status {
       -- 5. Linked Jira Defect / Blocker & Derogation status for the Latest Test Run (Board 2 Section 5)
       tr_issue_agg AS (
         SELECT
-          tri.TR_Id,
+          tri.TR_ID AS TR_Id,
           COUNT(DISTINCT tri.Issue_Id) AS total_issues,
-          COUNT(DISTINCT IF(UPPER(TRIM(iss.Issue_Status)) IN ('CLOSED', 'RESOLVED', 'DONE', 'VERIFIED'), tri.Issue_Id, NULL)) AS closed_issues,
-          COUNT(DISTINCT IF(COALESCE(UPPER(TRIM(iss.Issue_Status)), 'OPEN') NOT IN ('CLOSED', 'RESOLVED', 'DONE', 'VERIFIED', 'REJECTED', 'CANCELLED'), tri.Issue_Id, NULL)) AS open_issues,
+          COUNT(DISTINCT IF(UPPER(TRIM(COALESCE(iss.Issue_Status, tri.Issue_Status))) IN ('CLOSED', 'RESOLVED', 'DONE', 'VERIFIED'), tri.Issue_Id, NULL)) AS closed_issues,
+          COUNT(DISTINCT IF(COALESCE(UPPER(TRIM(COALESCE(iss.Issue_Status, tri.Issue_Status))), 'OPEN') NOT IN ('CLOSED', 'RESOLVED', 'DONE', 'VERIFIED', 'REJECTED', 'CANCELLED'), tri.Issue_Id, NULL)) AS open_issues,
           MAX(
             IF(
               REGEXP_CONTAINS(
-                LOWER(CONCAT(IFNULL(ARRAY_TO_STRING(iss.Labels, ' '), ''), ' ', IFNULL(iss.Summary, ''), ' ', IFNULL(iss.Issue_Resolution, ''))),
+                LOWER(CONCAT(COALESCE(ARRAY_TO_STRING(iss.Labels, ' '), tri.Issue_Label, ''), ' ', IFNULL(COALESCE(iss.Summary, tri.Issue_Summary), ''), ' ', IFNULL(COALESCE(iss.Issue_Resolution, tri.Issue_Resolution), ''))),
                 r'derogat'
               ),
               1,
               0
             )
           ) AS has_derogation
-        FROM `@{DATASET_NAME}.FACT_TestRun_Issue` AS tri
-        LEFT JOIN `@{DATASET_NAME}.TBL_CB_SDV_Raw_Issue_V2` AS iss
+        FROM `@{DATASET_NAME}.Fact_TR_Issue` AS tri
+        LEFT JOIN `@{DATASET_NAME}.TBL_CB_SDV_Raw_Issues_V2` AS iss
           ON tri.Issue_Id = iss.Issue_Id
-        WHERE tri.TR_Id IS NOT NULL
-        GROUP BY tri.TR_Id
+        WHERE tri.TR_ID IS NOT NULL
+        GROUP BY tri.TR_ID
       )
 
       SELECT
@@ -169,7 +169,7 @@ view: dt_tc_execution_status {
         COALESCE(ra.aggregated_req_id, 'NULL') AS aggregated_req_id,
         CASE
           WHEN IFNULL(ra.has_unavailable_req_name, 0) = 1 THEN 'No requirement available'
-          WHEN IFNULL(ra.count_linked_reqs, 0) = 0 AND ARRAY_LENGTH(tc.Verifies_Id) = 0 THEN 'Not linked'
+          WHEN IFNULL(ra.count_linked_reqs, 0) = 0 AND ARRAY_LENGTH(tc.Requirements) = 0 THEN 'Not linked'
           ELSE 'Linked'
         END AS req_link_status,
         COALESCE(ra.req_mysf_agg, 'NULL') AS req_mysf_agg,

@@ -11,9 +11,6 @@ week_start_day: monday
 # EXPLICIT GRANULAR INCLUDES (No broad wildcards - lookml-modeling-guidelines)
 # -----------------------------------------------------------------------------
 
-# 00_adm: Administration & Datagroups
-include: "/00_adm/datagroup/datagroups.lkml"
-
 # 03_explores: Modular Explores for All 4 SDV Generic KPI Dashboard Boards
 include: "/03_explores/traceability.explore.lkml"
 include: "/03_explores/requirements_traceability.explore.lkml"
@@ -29,9 +26,3 @@ include: "/02_data_tests/traceability.test.lkml"
 
 # 05_dashboards: Native LookML Dashboards
 include: "/05_dashboards/sdv_traceability_execution.dashboard.lookml"
-
-# -----------------------------------------------------------------------------
-# DEFAULT CACHING POLICY
-# -----------------------------------------------------------------------------
-
-persist_with: ampere_sdv_gold_etl_datagroup

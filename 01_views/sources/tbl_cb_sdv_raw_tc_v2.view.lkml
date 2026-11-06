@@ -49,7 +49,7 @@ view: tbl_cb_sdv_raw_tc_v2 {
   dimension_group: created {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
-    datatype: datetime
+    datatype: timestamp
     sql: ${TABLE}.Created ;;
     description: "Timestamp when the Test Case was created."
   }
@@ -63,7 +63,7 @@ view: tbl_cb_sdv_raw_tc_v2 {
   dimension_group: updated {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
-    datatype: datetime
+    datatype: timestamp
     sql: ${TABLE}.Updated ;;
     description: "Timestamp when the Test Case was last updated."
   }
@@ -82,8 +82,8 @@ view: tbl_cb_sdv_raw_tc_v2 {
 
   dimension: assigned_to {
     type: string
-    sql: ${TABLE}.Assigned_To ;;
-    description: "User assigned to the Test Case."
+    sql: ARRAY_TO_STRING(${TABLE}.Assigned_To, ', ') ;;
+    description: "User(s) assigned to the Test Case."
   }
 
   dimension: parent {
@@ -253,7 +253,7 @@ view: tbl_cb_sdv_raw_tc_v2 {
   dimension_group: completed {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
-    datatype: datetime
+    datatype: timestamp
     sql: ${TABLE}.Completed_At ;;
     description: "Completion timestamp on the Test Case item."
   }
@@ -570,7 +570,7 @@ view: tbl_cb_sdv_raw_tc_v2 {
 
   dimension: technical_stream {
     type: string
-    sql: ${TABLE}.Technical_stream ;;
+    sql: ${TABLE}.Technical_Stream ;;
     description: "Technical stream responsible for the Test Case."
   }
 
@@ -703,16 +703,42 @@ view: tbl_cb_sdv_raw_tc_v2 {
     description: "Milestone or release from which the Test Case is obsolete."
   }
 
-  dimension: verifies_name {
-    type: string
-    sql: ARRAY_TO_STRING(${TABLE}.Verifies_Name, ', ') ;;
-    description: "Names of requirements verified by the Test Case."
-  }
-
   dimension: verifies_id {
     hidden: yes
-    sql: ${TABLE}.Verifies_Id ;;
-    description: "Numeric IDs of requirements verified by the Test Case."
+    sql: ${TABLE}.Requirements ;;
+    description: "Numeric IDs of requirements verified by the Test Case (mapped to Requirements ARRAY<NUMERIC>)."
+  }
+
+  dimension: dll_validite {
+    type: number
+    hidden: yes
+    sql: ${TABLE}.DLL_VALIDITE ;;
+    description: "DLL validity indicator."
+  }
+
+  dimension: dll_checksum {
+    type: string
+    hidden: yes
+    sql: ${TABLE}.DLL_CHECKSUM ;;
+    description: "DLL row checksum."
+  }
+
+  dimension_group: dll_date_maj {
+    type: time
+    hidden: yes
+    timeframes: [raw, time, date]
+    datatype: timestamp
+    sql: ${TABLE}.DLL_DATE_MAJ ;;
+    description: "DLL update timestamp."
+  }
+
+  dimension_group: dll_date_creation {
+    type: time
+    hidden: yes
+    timeframes: [raw, time, date]
+    datatype: timestamp
+    sql: ${TABLE}.DLL_DATE_CREATION ;;
+    description: "DLL creation timestamp."
   }
 
   dimension: mysf {

@@ -72,13 +72,13 @@ view: +gold_dim_req {
     group_label: "2. Specification & Classification"
   }
 
-  dimension: req_requirement_category {
-    label: "Requirement Category"
+  dimension: req_classification {
+    label: "Requirement Classification"
     group_label: "2. Specification & Classification"
   }
 
-  dimension: req_categories {
-    label: "Categories List"
+  dimension: req_requirement_category {
+    label: "Requirement Category"
     group_label: "2. Specification & Classification"
   }
 
@@ -122,14 +122,6 @@ view: +gold_dim_req {
     type: yesno
     sql: LOWER(TRIM(${req_status})) LIKE '%rejected%' ;;
     description: "True when the Requirement status is Rejected."
-  }
-
-  dimension: is_covered_by_test_case {
-    label: "Has Linked Test Case (Gold Array)"
-    group_label: "2. Specification & Classification"
-    type: yesno
-    sql: ARRAY_LENGTH(${req_test_cases_list}) > 0 ;;
-    description: "True when the Requirement has at least one Test Case ID in Req_Test_Cases."
   }
 
   dimension: req_mysf {
@@ -182,11 +174,6 @@ view: +gold_dim_req {
 
   dimension: req_obsolete_from {
     label: "Obsolete From"
-    group_label: "3. Scope, MySF & Baselines"
-  }
-
-  dimension: req_sw_releases {
-    label: "SW Releases"
     group_label: "3. Scope, MySF & Baselines"
   }
 
@@ -293,11 +280,6 @@ view: +gold_dim_req {
     description: "True when the Requirement is marked Safety Related or carries an active ASIL classification (Board 1 Section 3)."
   }
 
-  dimension: req_safety_derived_from {
-    label: "Safety Derived From IDs"
-    group_label: "5. Safety, Cyber & Regulation"
-  }
-
   dimension: req_regulation {
     label: "Regulation"
     group_label: "5. Safety, Cyber & Regulation"
@@ -354,21 +336,6 @@ view: +gold_dim_req {
 
   dimension: req_validation_teams {
     label: "Validation Teams"
-    group_label: "6. Validation & Test Scope"
-  }
-
-  dimension: req_bench_type {
-    label: "Target Bench Types"
-    group_label: "6. Validation & Test Scope"
-  }
-
-  dimension: req_items_under_test {
-    label: "Items Under Test"
-    group_label: "6. Validation & Test Scope"
-  }
-
-  dimension: req_test_cases {
-    label: "Linked Test Case IDs"
     group_label: "6. Validation & Test Scope"
   }
 
@@ -457,15 +424,15 @@ view: +gold_dim_req {
     type: string
     label: "Filter: Requirement Feature CBID (Array Item)"
     group_label: "3. Scope, MySF & Baselines"
-    description: "Zero-fanout correlated EXISTS filter on Req_Feature_CBId array elements."
-    sql: EXISTS (SELECT 1 FROM UNNEST(${req_feature_cbid_list}) AS x WHERE {% condition req_feature_cbid_any %} x {% endcondition %}) ;;
+    description: "Zero-fanout correlated EXISTS filter on Req_Feature_CB_Ids array elements."
+    sql: EXISTS (SELECT 1 FROM UNNEST(${req_feature_cbid_list}) AS x WHERE {% condition req_feature_cbid_any %} CAST(x AS STRING) {% endcondition %}) ;;
   }
 
   filter: req_requirement_parent_id_any {
     type: string
     label: "Filter: Parent Requirement ID (Array Item)"
     group_label: "1. Identity & Hierarchy"
-    description: "Zero-fanout correlated EXISTS filter on Req_Requirement_Parent_Id array elements."
+    description: "Zero-fanout correlated EXISTS filter on Req_Parent_Ids array elements."
     sql: EXISTS (SELECT 1 FROM UNNEST(${req_requirement_parent_id_list}) AS x WHERE {% condition req_requirement_parent_id_any %} CAST(x AS STRING) {% endcondition %}) ;;
   }
 
@@ -473,24 +440,8 @@ view: +gold_dim_req {
     type: string
     label: "Filter: Requirement SW Component (Array Item)"
     group_label: "3. Scope, MySF & Baselines"
-    description: "Zero-fanout correlated EXISTS filter on Req_SW_Components array elements."
+    description: "Zero-fanout correlated EXISTS filter on Req_SW_Component_Ids array elements."
     sql: EXISTS (SELECT 1 FROM UNNEST(${req_sw_components_list}) AS x WHERE {% condition req_sw_components_any %} CAST(x AS STRING) {% endcondition %}) ;;
-  }
-
-  filter: req_bench_type_any {
-    type: string
-    label: "Filter: Requirement Target Bench Type (Array Item)"
-    group_label: "6. Validation & Test Scope"
-    description: "Zero-fanout correlated EXISTS filter on Req_Bench_Type array elements."
-    sql: EXISTS (SELECT 1 FROM UNNEST(${req_bench_type_list}) AS x WHERE {% condition req_bench_type_any %} x {% endcondition %}) ;;
-  }
-
-  filter: req_test_cases_any {
-    type: string
-    label: "Filter: Linked Test Case ID (Array Item)"
-    group_label: "6. Validation & Test Scope"
-    description: "Zero-fanout correlated EXISTS filter on Req_Test_Cases array elements."
-    sql: EXISTS (SELECT 1 FROM UNNEST(${req_test_cases_list}) AS x WHERE {% condition req_test_cases_any %} CAST(x AS STRING) {% endcondition %}) ;;
   }
 
   # ---------------------------------------------------------------------------
@@ -545,28 +496,6 @@ view: +gold_dim_req {
     filters: [is_rejected_status: "yes"]
     value_format_name: decimal_0
     description: "Distinct count of Requirements in Rejected status."
-    drill_fields: [detail*]
-  }
-
-  measure: covered_requirement_count {
-    label: "Covered Requirements"
-    group_label: "Requirement Metrics"
-    type: count_distinct
-    sql: ${pk1_req_id} ;;
-    filters: [is_covered_by_test_case: "yes"]
-    value_format_name: decimal_0
-    description: "Distinct count of Requirements linked to at least one Test Case."
-    drill_fields: [detail*]
-  }
-
-  measure: uncovered_requirement_count {
-    label: "Uncovered Requirements"
-    group_label: "Requirement Metrics"
-    type: count_distinct
-    sql: ${pk1_req_id} ;;
-    filters: [is_covered_by_test_case: "no"]
-    value_format_name: decimal_0
-    description: "Distinct count of Requirements with no linked Test Cases."
     drill_fields: [detail*]
   }
 
@@ -632,16 +561,6 @@ view: +gold_dim_req {
     sql: SAFE_DIVIDE(${approved_requirement_count}, ${requirement_count}) ;;
     value_format_name: percent_1
     description: "Percentage of total Requirements that are Approved, Accepted, or Released."
-    drill_fields: [detail*]
-  }
-
-  measure: requirement_test_coverage_rate {
-    label: "Requirement Test Coverage Rate"
-    group_label: "Requirement Metrics"
-    type: number
-    sql: SAFE_DIVIDE(${covered_requirement_count}, ${requirement_count}) ;;
-    value_format_name: percent_1
-    description: "Percentage of total Requirements covered by at least one Test Case."
     drill_fields: [detail*]
   }
 

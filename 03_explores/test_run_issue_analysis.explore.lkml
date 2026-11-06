@@ -15,7 +15,6 @@ explore: test_run_issue_analysis {
   description: "Analyzes Test Runs linked to Jira Issues/Defects, including open vs resolved defects, Jira derogations, fix versions, and resolution duration."
   view_name: fact_testrun_issue
   view_label: "1. Test Run - Issue Link (fact_testrun_issue)"
-  persist_with: ampere_sdv_gold_etl_datagroup
 
   join: tbl_cb_sdv_raw_tr_v2 {
     view_label: "2. Test Run (tbl_cb_sdv_raw_tr_v2)"

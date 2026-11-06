@@ -95,9 +95,9 @@ view: +tbl_cb_sdv_raw_issue_v2 {
   dimension: resolution_duration_days {
     group_label: "Issue Lifecycle Flags"
     label: "Resolution Duration (Days)"
-    description: "Number of days between Issue creation and close date (or current date if still open)"
+    description: "Number of days between Issue creation and last update date (or current date if still open)"
     type: number
-    sql: DATE_DIFF(COALESCE(${closed_date}, CURRENT_DATE()), ${created_date}, DAY) ;;
+    sql: DATE_DIFF(IF(${is_resolved_or_closed}, COALESCE(${updated_date}, CURRENT_DATE()), CURRENT_DATE()), ${created_date}, DAY) ;;
     value_format_name: decimal_0
   }
 
@@ -200,10 +200,10 @@ view: +tbl_cb_sdv_raw_issue_v2 {
       priority,
       labels,
       fix_versions,
-      tracker,
-      created_by,
+      project_name,
+      project_key,
       created_date,
-      closed_date,
+      updated_date,
       resolution_duration_days
     ]
   }

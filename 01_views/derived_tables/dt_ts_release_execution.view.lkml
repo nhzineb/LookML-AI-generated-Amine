@@ -22,7 +22,7 @@ view: dt_ts_release_execution {
           f.TC_Id AS TC_Id_Int,
           f.TS_Id,
           f.TR_Id,
-          COALESCE(tr.Completed_At, tr.Created) AS TR_RunDate,
+          CAST(COALESCE(tr.Completed_At, tr.Created) AS DATETIME) AS TR_RunDate,
           CASE
             WHEN UPPER(TRIM(tr.Result)) IN ('PASSED', 'PASS', 'OK') THEN 'Passed'
             WHEN UPPER(TRIM(tr.Result)) IN ('FAILED', 'FAIL', 'KO', 'NOK') THEN 'Failed'
@@ -30,15 +30,15 @@ view: dt_ts_release_execution {
             ELSE 'Not Executed'
           END AS TR_Result,
           COALESCE(ts.TS_Domain, tc.Domain) AS TS_Domain,
-          COALESCE(f.TR_MySF, ARRAY_TO_STRING(r.Req_MySF, ', ')) AS Req_MySF,
+          COALESCE(f.TR_MySF.TR_MySF, ARRAY_TO_STRING(r.Req_MySF, ', ')) AS Req_MySF,
           ARRAY_TO_STRING(ts.TS_MySF, ', ') AS TS_MySF,
           ts.TS_Type AS TS_Type,
           ARRAY_TO_STRING(tc.Validation_Teams, ', ') AS TC_Validation_Team,
-          ARRAY_TO_STRING(r.Req_Regulation, ', ') AS Req_Regulation,
+          ARRAY_TO_STRING(r.Req_Regulations, ', ') AS Req_Regulation,
           r.Req_ASIL AS Req_ASIL,
           tc.Ownership AS TC_Execution_Organization_Arr,
           ARRAY_TO_STRING(tc.Ownership, ', ') AS TC_Execution_Organization,
-          ARRAY_TO_STRING(ts.TS_Bench_Type, ', ') AS TS_Bench_Type,
+          ARRAY_TO_STRING(ts.TS_Bench_Types, ', ') AS TS_Bench_Type,
           ARRAY_TO_STRING(tc.Feature_Id, ', ') AS TC_Feature,
           tc.Type AS TC_Type,
           ARRAY_TO_STRING(r.Req_Baseline, ', ') AS Req_Baseline,
@@ -50,7 +50,7 @@ view: dt_ts_release_execution {
           ARRAY_TO_STRING(ts.TS_IVC_Releases, ', ') AS TS_IVC_Releases,
           ARRAY_TO_STRING(ts.TS_CDC_Releases, ', ') AS TS_CDC_Releases,
           ARRAY_TO_STRING(ts.TS_Other_Releases, ', ') AS TS_Other_Releases
-        FROM `@{DATASET_NAME}.FACT_TC_TR_TS_REQ` AS f
+        FROM `@{DATASET_NAME}.Fact_TC_TR_TS_Req` AS f
         INNER JOIN `@{DATASET_NAME}.gold_dim_ts` AS ts
           ON f.TS_Id = ts.TS_Id
         LEFT JOIN `@{DATASET_NAME}.TBL_CB_SDV_Raw_TC_V2` AS tc

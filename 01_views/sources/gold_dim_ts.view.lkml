@@ -18,7 +18,7 @@ view: gold_dim_ts {
   }
 
   # ---------------------------------------------------------------------------
-  # ALL 41 COLUMNS FROM gold_dim_ts
+  # ALL 41 COLUMNS FROM gold_dim_ts (New Schema v2)
   # ---------------------------------------------------------------------------
 
   dimension: ts_id {
@@ -82,8 +82,8 @@ view: gold_dim_ts {
 
   dimension: ts_assigned_to {
     type: string
-    sql: ${TABLE}.TS_Assigned_To ;;
-    description: "Engineer or team assigned to execute or manage the Test Set."
+    sql: ARRAY_TO_STRING(${TABLE}.TS_Assigned_To, ', ') ;;
+    description: "Engineer(s) or team(s) assigned to execute or manage the Test Set."
   }
 
   dimension: ts_parent {
@@ -128,8 +128,8 @@ view: gold_dim_ts {
 
   dimension: ts_validation_team {
     type: string
-    sql: ARRAY_TO_STRING(${TABLE}.TS_Validation_Team, ', ') ;;
-    description: "Validation team(s) responsible for the Test Set."
+    sql: ARRAY_TO_STRING(${TABLE}.TS_Validation_Teams, ', ') ;;
+    description: "Validation team(s) responsible for the Test Set (TS_Validation_Teams)."
   }
 
   dimension: ts_sweet {
@@ -153,8 +153,8 @@ view: gold_dim_ts {
 
   dimension: ts_bench_type {
     type: string
-    sql: ARRAY_TO_STRING(${TABLE}.TS_Bench_Type, ', ') ;;
-    description: "Test bench environment types (e.g., HIL, SIL, Vehicle) used for the Test Set."
+    sql: ARRAY_TO_STRING(${TABLE}.TS_Bench_Types, ', ') ;;
+    description: "Test bench environment types (e.g., HIL, SIL, Vehicle) used for the Test Set (TS_Bench_Types)."
   }
 
   dimension: ts_items_under_test {
@@ -172,8 +172,8 @@ view: gold_dim_ts {
   dimension: ts_bench_id {
     type: string
     hidden: yes
-    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.TS_Bench_Id) AS x), ', ') ;;
-    description: "Internal numeric identifiers of the assigned test benches."
+    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.TS_Bench_Ids) AS x), ', ') ;;
+    description: "Internal numeric identifiers of the assigned test benches (TS_Bench_Ids)."
   }
 
   dimension: ts_bench {
@@ -184,8 +184,8 @@ view: gold_dim_ts {
 
   dimension: ts_test_cases_id {
     type: string
-    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.TS_Test_Cases_Id) AS x), ', ') ;;
-    description: "Numeric IDs of the Test Cases included in the Test Set."
+    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.TS_TC_Ids) AS x), ', ') ;;
+    description: "Numeric IDs of the Test Cases included in the Test Set (TS_TC_Ids)."
   }
 
   dimension: ts_test_case {
@@ -203,14 +203,14 @@ view: gold_dim_ts {
   dimension: ts_sw_releases_id {
     type: string
     hidden: yes
-    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.TS_SW_Releases_Id) AS x), ', ') ;;
-    description: "Numeric IDs of the software releases linked to the Test Set."
+    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.TS_SW_Releases) AS x), ', ') ;;
+    description: "Numeric IDs of the software releases linked to the Test Set (TS_SW_Releases)."
   }
 
   dimension: ts_sw_releases {
     type: string
-    sql: ARRAY_TO_STRING(${TABLE}.TS_SW_Releases, ', ') ;;
-    description: "Software release names verified by the Test Set."
+    sql: ARRAY_TO_STRING(${TABLE}.TS_SW_Releases_Resolved, ', ') ;;
+    description: "Software release names verified by the Test Set (TS_SW_Releases_Resolved)."
   }
 
   dimension: ts_isp_id {
@@ -288,14 +288,14 @@ view: gold_dim_ts {
 
   dimension: ts_bench_type_list {
     hidden: yes
-    description: "Raw ARRAY column TS_Bench_Type for UNNEST EXISTS filtering and ARRAY_LENGTH."
-    sql: ${TABLE}.TS_Bench_Type ;;
+    description: "Raw ARRAY column TS_Bench_Types for UNNEST EXISTS filtering and ARRAY_LENGTH."
+    sql: ${TABLE}.TS_Bench_Types ;;
   }
 
   dimension: ts_validation_team_list {
     hidden: yes
-    description: "Raw ARRAY column TS_Validation_Team for UNNEST EXISTS filtering."
-    sql: ${TABLE}.TS_Validation_Team ;;
+    description: "Raw ARRAY column TS_Validation_Teams for UNNEST EXISTS filtering."
+    sql: ${TABLE}.TS_Validation_Teams ;;
   }
 
   dimension: ts_vehicle_project_list {
@@ -336,7 +336,7 @@ view: gold_dim_ts {
 
   dimension: ts_test_cases_id_list {
     hidden: yes
-    description: "Raw ARRAY column TS_Test_Cases_Id for UNNEST EXISTS filtering and ARRAY_LENGTH."
-    sql: ${TABLE}.TS_Test_Cases_Id ;;
+    description: "Raw ARRAY column TS_TC_Ids for UNNEST EXISTS filtering and ARRAY_LENGTH."
+    sql: ${TABLE}.TS_TC_Ids ;;
   }
 }

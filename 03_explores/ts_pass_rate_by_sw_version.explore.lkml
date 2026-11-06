@@ -18,7 +18,6 @@ explore: ts_pass_rate_by_sw_version {
   description: "Software-Release-grain Explore for Board 3 tracking Test Case execution verdicts across PCU, PIU, IVC, CDC, and OTHER releases, extracted Baselines (BL6, BL7, BL6+BL7), Validation Teams (SWE.6, C3V), and Bench Types (HIL, EIPF, VHL, SIL)."
   view_name: dt_ts_release_execution
   view_label: "1. TS SW Release & Baseline Execution (Board 3)"
-  persist_with: ampere_sdv_gold_etl_datagroup
 
   join: gold_dim_ts {
     view_label: "2. Test Set Attributes (gold_dim_ts)"

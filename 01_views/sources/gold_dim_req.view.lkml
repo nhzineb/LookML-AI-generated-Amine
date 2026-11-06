@@ -1,5 +1,5 @@
 # =============================================================================
-# SOURCE VIEW: gold_dim_req (Physical Table: gold_dim_req - 48 Columns)
+# SOURCE VIEW: gold_dim_req (Physical Table: gold_dim_req - 39 Columns)
 # =============================================================================
 
 view: gold_dim_req {
@@ -18,7 +18,7 @@ view: gold_dim_req {
   }
 
   # ---------------------------------------------------------------------------
-  # ALL 48 COLUMNS FROM gold_dim_req
+  # ALL 39 COLUMNS FROM gold_dim_req (New Schema v2)
   # ---------------------------------------------------------------------------
 
   dimension: req_id {
@@ -40,10 +40,16 @@ view: gold_dim_req {
     description: "Full textual specification and description of the Requirement."
   }
 
+  dimension: req_classification {
+    type: string
+    sql: ${TABLE}.Req_Classification ;;
+    description: "Classification of the Requirement (Req_Classification)."
+  }
+
   dimension: req_type {
     type: string
-    sql: ${TABLE}.Req_Type ;;
-    description: "Classification type of the Requirement."
+    sql: ${TABLE}.Req_Classification ;;
+    description: "Classification type of the Requirement (mapped to Req_Classification)."
   }
 
   dimension_group: req_created {
@@ -90,8 +96,8 @@ view: gold_dim_req {
 
   dimension: req_tracker {
     type: string
-    sql: ${TABLE}.Req_Tracker ;;
-    description: "Name of the CodeBeamer Tracker hosting the Requirement."
+    sql: ${TABLE}.Req_Tracker_Name ;;
+    description: "Name of the CodeBeamer Tracker hosting the Requirement (Req_Tracker_Name)."
   }
 
   dimension: req_status {
@@ -106,22 +112,16 @@ view: gold_dim_req {
     description: "Indicates whether downstream child requirement decomposition is mandatory."
   }
 
-  dimension: req_categories {
-    type: string
-    sql: ARRAY_TO_STRING(${TABLE}.Req_Categories, ', ') ;;
-    description: "Comma-separated list of functional categories assigned to the Requirement."
-  }
-
   dimension: req_engineering_level {
     type: string
-    sql: ARRAY_TO_STRING(${TABLE}.Req_Engineering_Level, ', ') ;;
-    description: "Engineering V-cycle level(s) of the Requirement."
+    sql: ${TABLE}.Req_Engineering_Level ;;
+    description: "Engineering V-cycle level of the Requirement (Req_Engineering_Level)."
   }
 
   dimension: req_regulation {
     type: string
-    sql: ARRAY_TO_STRING(${TABLE}.Req_Regulation, ', ') ;;
-    description: "Regulatory standards applicable to the Requirement."
+    sql: ARRAY_TO_STRING(${TABLE}.Req_Regulations, ', ') ;;
+    description: "Regulatory standards applicable to the Requirement (Req_Regulations)."
   }
 
   dimension: req_asil {
@@ -150,8 +150,8 @@ view: gold_dim_req {
 
   dimension: req_allocation {
     type: string
-    sql: ARRAY_TO_STRING(${TABLE}.Req_Allocation, ', ') ;;
-    description: "System or architectural component allocation of the Requirement."
+    sql: ARRAY_TO_STRING(${TABLE}.Req_Allocations, ', ') ;;
+    description: "System or architectural component allocation of the Requirement (Req_Allocations)."
   }
 
   dimension: req_validation_teams {
@@ -162,38 +162,32 @@ view: gold_dim_req {
 
   dimension: req_sweet {
     type: string
-    sql: ARRAY_TO_STRING(${TABLE}.Req_SWEET, ', ') ;;
-    description: "SWEET electrical/electronic architecture milestone releases for the Requirement."
+    sql: ARRAY_TO_STRING(${TABLE}.Req_SWEETs, ', ') ;;
+    description: "SWEET electrical/electronic architecture milestone releases for the Requirement (Req_SWEETs)."
   }
 
   dimension: req_vehicle_project_id {
     type: string
-    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.Req_Vehicle_Project_Id) AS x), ', ') ;;
-    description: "Vehicle project IDs associated with the Requirement."
+    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.Req_Vehicle_Project_Ids) AS x), ', ') ;;
+    description: "Vehicle project IDs associated with the Requirement (Req_Vehicle_Project_Ids)."
   }
 
   dimension: req_system_owner {
     type: string
-    sql: ARRAY_TO_STRING(${TABLE}.Req_System_Owner, ', ') ;;
-    description: "System Owner(s) accountable for the Requirement."
+    sql: ${TABLE}.Req_System_Owner ;;
+    description: "System Owner accountable for the Requirement."
   }
 
   dimension: req_requirement_parent_id {
     type: string
-    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.Req_Requirement_Parent_Id) AS x), ', ') ;;
-    description: "Upstream parent Requirement IDs linked in the traceability hierarchy."
-  }
-
-  dimension: req_safety_derived_from {
-    type: string
-    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.Req_Safety_Derived_From) AS x), ', ') ;;
-    description: "IDs of upstream safety items from which this Requirement is derived."
+    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.Req_Parent_Ids) AS x), ', ') ;;
+    description: "Upstream parent Requirement IDs linked in the traceability hierarchy (Req_Parent_Ids)."
   }
 
   dimension: req_feature_cbid {
     type: string
-    sql: ARRAY_TO_STRING(${TABLE}.Req_Feature_CBId, ', ') ;;
-    description: "CodeBeamer Feature identifiers linked to the Requirement."
+    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.Req_Feature_CB_Ids) AS x), ', ') ;;
+    description: "CodeBeamer Feature identifiers linked to the Requirement (Req_Feature_CB_Ids)."
   }
 
   dimension: req_cb_project_name {
@@ -216,8 +210,8 @@ view: gold_dim_req {
 
   dimension: req_requirement_category {
     type: string
-    sql: ${TABLE}.Req_RequirementCategory ;;
-    description: "Primary category classification of the Requirement."
+    sql: ${TABLE}.Req_Classification ;;
+    description: "Primary category classification of the Requirement (mapped to Req_Classification)."
   }
 
   dimension: req_final_status {
@@ -228,8 +222,8 @@ view: gold_dim_req {
 
   dimension: req_supplier {
     type: string
-    sql: ARRAY_TO_STRING(${TABLE}.Req_Supplier, ', ') ;;
-    description: "External or internal supplier(s) associated with the Requirement."
+    sql: ARRAY_TO_STRING(${TABLE}.Req_Suppliers, ', ') ;;
+    description: "External or internal supplier(s) associated with the Requirement (Req_Suppliers)."
   }
 
   dimension: req_planned_for {
@@ -247,8 +241,8 @@ view: gold_dim_req {
   dimension: req_mysf_id {
     type: string
     hidden: yes
-    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.Req_MySF_Id) AS x), ', ') ;;
-    description: "Internal numeric identifiers for MySystemFunction (MySF) linked to the Requirement."
+    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.Req_MySFs) AS x), ', ') ;;
+    description: "Internal numeric identifiers for MySystemFunction (Req_MySFs) linked to the Requirement."
   }
 
   dimension: req_mysf {
@@ -259,8 +253,8 @@ view: gold_dim_req {
 
   dimension: req_sw_components {
     type: string
-    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.Req_SW_Components) AS x), ', ') ;;
-    description: "Software component IDs allocated to the Requirement."
+    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.Req_SW_Component_Ids) AS x), ', ') ;;
+    description: "Software component IDs allocated to the Requirement (Req_SW_Component_Ids)."
   }
 
   dimension: req_legacy_identifier {
@@ -277,38 +271,14 @@ view: gold_dim_req {
 
   dimension: req_target_planned_for {
     type: string
-    sql: ARRAY_TO_STRING(${TABLE}.Req_TargetPlannedFor, ', ') ;;
+    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.Req_TargetPlannedFor) AS x), ', ') ;;
     description: "Target release milestones planned for Requirement delivery."
   }
 
   dimension: req_obsolete_from {
     type: string
-    sql: ARRAY_TO_STRING(${TABLE}.Req_ObsoleteFrom, ', ') ;;
+    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.Req_ObsoleteFrom) AS x), ', ') ;;
     description: "Release or milestone from which the Requirement becomes obsolete."
-  }
-
-  dimension: req_bench_type {
-    type: string
-    sql: ARRAY_TO_STRING(${TABLE}.Req_Bench_Type, ', ') ;;
-    description: "Target test bench environment types (e.g., HIL, SIL, Vehicle) for the Requirement."
-  }
-
-  dimension: req_items_under_test {
-    type: string
-    sql: ARRAY_TO_STRING(${TABLE}.Req_Items_Under_Test, ', ') ;;
-    description: "Hardware or software Items Under Test (IUT) associated with the Requirement."
-  }
-
-  dimension: req_test_cases {
-    type: string
-    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.Req_Test_Cases) AS x), ', ') ;;
-    description: "Comma-separated list of Test Case IDs verifying this Requirement."
-  }
-
-  dimension: req_sw_releases {
-    type: string
-    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.Req_SW_Releases) AS x), ', ') ;;
-    description: "Software release IDs associated with the Requirement."
   }
 
   dimension: req_created_iso_week {
@@ -332,20 +302,20 @@ view: gold_dim_req {
 
   dimension: req_engineering_level_list {
     hidden: yes
-    description: "Raw ARRAY column Req_Engineering_Level for UNNEST EXISTS filtering."
-    sql: ${TABLE}.Req_Engineering_Level ;;
+    description: "1-element ARRAY wrapper over scalar Req_Engineering_Level for UNNEST EXISTS filtering."
+    sql: IF(${TABLE}.Req_Engineering_Level IS NULL, ARRAY<STRING>[], [${TABLE}.Req_Engineering_Level]) ;;
   }
 
   dimension: req_regulation_list {
     hidden: yes
-    description: "Raw ARRAY column Req_Regulation for UNNEST EXISTS filtering."
-    sql: ${TABLE}.Req_Regulation ;;
+    description: "Raw ARRAY column Req_Regulations for UNNEST EXISTS filtering."
+    sql: ${TABLE}.Req_Regulations ;;
   }
 
   dimension: req_allocation_list {
     hidden: yes
-    description: "Raw ARRAY column Req_Allocation for UNNEST EXISTS filtering."
-    sql: ${TABLE}.Req_Allocation ;;
+    description: "Raw ARRAY column Req_Allocations for UNNEST EXISTS filtering."
+    sql: ${TABLE}.Req_Allocations ;;
   }
 
   dimension: req_validation_teams_list {
@@ -356,37 +326,25 @@ view: gold_dim_req {
 
   dimension: req_supplier_list {
     hidden: yes
-    description: "Raw ARRAY column Req_Supplier for UNNEST EXISTS filtering."
-    sql: ${TABLE}.Req_Supplier ;;
+    description: "Raw ARRAY column Req_Suppliers for UNNEST EXISTS filtering."
+    sql: ${TABLE}.Req_Suppliers ;;
   }
 
   dimension: req_feature_cbid_list {
     hidden: yes
-    description: "Raw ARRAY column Req_Feature_CBId for UNNEST EXISTS filtering and ARRAY_LENGTH."
-    sql: ${TABLE}.Req_Feature_CBId ;;
+    description: "Raw ARRAY column Req_Feature_CB_Ids for UNNEST EXISTS filtering and ARRAY_LENGTH."
+    sql: ${TABLE}.Req_Feature_CB_Ids ;;
   }
 
   dimension: req_requirement_parent_id_list {
     hidden: yes
-    description: "Raw ARRAY column Req_Requirement_Parent_Id for UNNEST EXISTS filtering and ARRAY_LENGTH."
-    sql: ${TABLE}.Req_Requirement_Parent_Id ;;
+    description: "Raw ARRAY column Req_Parent_Ids for UNNEST EXISTS filtering and ARRAY_LENGTH."
+    sql: ${TABLE}.Req_Parent_Ids ;;
   }
 
   dimension: req_sw_components_list {
     hidden: yes
-    description: "Raw ARRAY column Req_SW_Components for UNNEST EXISTS filtering and ARRAY_LENGTH."
-    sql: ${TABLE}.Req_SW_Components ;;
-  }
-
-  dimension: req_bench_type_list {
-    hidden: yes
-    description: "Raw ARRAY column Req_Bench_Type for UNNEST EXISTS filtering and ARRAY_LENGTH."
-    sql: ${TABLE}.Req_Bench_Type ;;
-  }
-
-  dimension: req_test_cases_list {
-    hidden: yes
-    description: "Raw ARRAY column Req_Test_Cases for UNNEST EXISTS filtering and ARRAY_LENGTH."
-    sql: ${TABLE}.Req_Test_Cases ;;
+    description: "Raw ARRAY column Req_SW_Component_Ids for UNNEST EXISTS filtering and ARRAY_LENGTH."
+    sql: ${TABLE}.Req_SW_Component_Ids ;;
   }
 }

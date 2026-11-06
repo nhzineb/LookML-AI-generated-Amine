@@ -12,7 +12,6 @@ explore: req_pass_rate_by_bench {
   description: "Requirement-by-Bench-Type Explore for Board 4 evaluating worst-case Test Run validation verdicts (Passed, Failed, Ongoing, Not Executed, Not covered, Rejected) per Requirement and individual Bench Type (SIL, HIL, EIPF, VHL, SW_Component)."
   view_name: dt_req_bench_validation
   view_label: "1. Requirement Validation by Bench Type (Board 4)"
-  persist_with: ampere_sdv_gold_etl_datagroup
 
   join: gold_dim_req {
     view_label: "2. Requirement Attributes (gold_dim_req)"

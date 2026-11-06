@@ -17,6 +17,16 @@ view: +fact_tc_tr_ts_req {
     group_label: "1. Derived Execution Scope"
   }
 
+  dimension: tc_mysf {
+    label: "Derived Test Case MySF (TC_MySF)"
+    group_label: "1. Derived Execution Scope"
+  }
+
+  dimension: ts_mysf {
+    label: "Derived Test Set MySF (TS_MySF)"
+    group_label: "1. Derived Execution Scope"
+  }
+
   dimension: is_executed_tc {
     label: "Has Executed Test Run"
     group_label: "1. Derived Execution Scope"

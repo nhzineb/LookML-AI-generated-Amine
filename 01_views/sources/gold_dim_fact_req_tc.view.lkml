@@ -1,9 +1,9 @@
 # =============================================================================
-# SOURCE VIEW: gold_dim_fact_req_tc (Physical Table: gold_dim_fact_req_tc - 11 Columns)
+# SOURCE VIEW: gold_dim_fact_req_tc (Physical Table: Fact_Req_TC - 11 Columns)
 # =============================================================================
 
 view: gold_dim_fact_req_tc {
-  sql_table_name: `@{DATASET_NAME}.gold_dim_fact_req_tc` ;;
+  sql_table_name: `@{DATASET_NAME}.Fact_Req_TC` ;;
 
   # ---------------------------------------------------------------------------
   # COMPOSITE PRIMARY KEY (LAMS K1, K3, K4, K7, K8)
@@ -32,7 +32,7 @@ view: gold_dim_fact_req_tc {
   }
 
   # ---------------------------------------------------------------------------
-  # ALL 11 COLUMNS FROM gold_dim_fact_req_tc
+  # ALL 11 COLUMNS FROM Fact_Req_TC
   # ---------------------------------------------------------------------------
 
   dimension: req_id {
@@ -40,7 +40,7 @@ view: gold_dim_fact_req_tc {
     hidden: yes
     sql: ${pk2_req_id} ;;
     value_format_name: id
-    description: "Requirement ID in gold_dim_fact_req_tc."
+    description: "Requirement ID in Fact_Req_TC."
   }
 
   dimension: tc_id {
@@ -53,13 +53,13 @@ view: gold_dim_fact_req_tc {
 
   dimension: req_mysf {
     type: string
-    sql: ARRAY_TO_STRING(${TABLE}.Req_MySF, ', ') ;;
+    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.Req_MySF) AS x), ', ') ;;
     description: "Consolidated MySystemFunction (MySF) list on the Requirement-TC coverage bridge."
   }
 
   dimension: req_baseline {
     type: string
-    sql: ARRAY_TO_STRING(${TABLE}.Req_Baseline, ', ') ;;
+    sql: ARRAY_TO_STRING(${TABLE}.Req_Baselines, ', ') ;;
     description: "Consolidated Requirement Baselines on the Requirement-TC coverage bridge."
   }
 
@@ -71,13 +71,13 @@ view: gold_dim_fact_req_tc {
 
   dimension: req_feature_cbid {
     type: string
-    sql: ARRAY_TO_STRING(${TABLE}.Req_Feature_CBId, ', ') ;;
+    sql: ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(${TABLE}.Req_Feature_CB_Ids) AS x), ', ') ;;
     description: "CodeBeamer Feature IDs associated with the Requirement."
   }
 
   dimension: req_allocation {
     type: string
-    sql: ARRAY_TO_STRING(${TABLE}.Req_Allocation, ', ') ;;
+    sql: ARRAY_TO_STRING(${TABLE}.Req_Allocations, ', ') ;;
     description: "Architectural allocation of the Requirement."
   }
 
@@ -89,14 +89,14 @@ view: gold_dim_fact_req_tc {
 
   dimension: req_regulation {
     type: string
-    sql: ARRAY_TO_STRING(${TABLE}.Req_Regulation, ', ') ;;
+    sql: ARRAY_TO_STRING(${TABLE}.Req_Regulations, ', ') ;;
     description: "Regulations applicable to the Requirement."
   }
 
   dimension: tc_engineering_level {
     type: string
-    sql: ARRAY_TO_STRING(${TABLE}.TC_Engineering_Level, ', ') ;;
-    description: "Engineering level(s) of the covering Test Case."
+    sql: ${TABLE}.TC_Engineering_Level ;;
+    description: "Engineering level of the covering Test Case."
   }
 
   dimension: tc_system_owner {
@@ -114,7 +114,7 @@ view: gold_dim_fact_req_tc {
 
   dimension: req_baseline_list {
     hidden: yes
-    description: "Raw ARRAY column Req_Baseline on bridge for UNNEST EXISTS filtering."
-    sql: ${TABLE}.Req_Baseline ;;
+    description: "Raw ARRAY column Req_Baselines on bridge for UNNEST EXISTS filtering."
+    sql: ${TABLE}.Req_Baselines ;;
   }
 }

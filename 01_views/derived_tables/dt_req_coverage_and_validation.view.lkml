@@ -23,27 +23,25 @@ view: dt_req_coverage_and_validation {
           r.Req_Domain,
           r.Req_Child_Required,
           r.Req_ValidationMethods,
-          ARRAY_TO_STRING(r.Req_Engineering_Level, ', ') AS req_eng_level_str,
-          r.Req_Engineering_Level[SAFE_OFFSET(0)] AS req_eng_level_primary,
-          ARRAY_TO_STRING(r.Req_Supplier, ', ') AS req_supplier_str,
+          r.Req_Engineering_Level AS req_eng_level_str,
+          r.Req_Engineering_Level AS req_eng_level_primary,
+          ARRAY_TO_STRING(r.Req_Suppliers, ', ') AS req_supplier_str,
           ARRAY_TO_STRING(r.Req_MySF, ', ') AS req_mysf_str,
-          ARRAY_TO_STRING(r.Req_Feature_CBId, ', ') AS req_feature_str,
-          ARRAY_TO_STRING(r.Req_Bench_Type, ', ') AS req_bench_type_str,
-          ARRAY_LENGTH(r.Req_Requirement_Parent_Id) AS parent_req_count,
-          ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(r.Req_Requirement_Parent_Id) AS x), ', ') AS parent_req_ids_str,
-          r.Req_SW_Components AS req_swc_array,
-          r.Req_Test_Cases AS req_tc_array
+          ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(r.Req_Feature_CB_Ids) AS x), ', ') AS req_feature_str,
+          ARRAY_LENGTH(r.Req_Parent_Ids) AS parent_req_count,
+          ARRAY_TO_STRING(ARRAY(SELECT CAST(x AS STRING) FROM UNNEST(r.Req_Parent_Ids) AS x), ', ') AS parent_req_ids_str,
+          r.Req_SW_Component_Ids AS req_swc_array
         FROM `@{DATASET_NAME}.gold_dim_req` AS r
         WHERE r.Req_Id IS NOT NULL
       ),
 
-      -- 2. Parent-to-Child Requirement links derived from Req_Requirement_Parent_Id
+      -- 2. Parent-to-Child Requirement links derived from Req_Parent_Ids
       parent_child_links AS (
         SELECT DISTINCT
           parent_id AS Parent_Req_Id,
           child.Req_Id AS Child_Req_Id
         FROM `@{DATASET_NAME}.gold_dim_req` AS child
-        CROSS JOIN UNNEST(child.Req_Requirement_Parent_Id) AS parent_id
+        CROSS JOIN UNNEST(child.Req_Parent_Ids) AS parent_id
         WHERE child.Req_Id IS NOT NULL
           AND parent_id IS NOT NULL
       ),
@@ -60,10 +58,10 @@ view: dt_req_coverage_and_validation {
       swc_exploded AS (
         SELECT DISTINCT
           r.Req_Id,
-          r.Req_Engineering_Level[SAFE_OFFSET(0)] AS req_eng_level_primary,
+          r.Req_Engineering_Level AS req_eng_level_primary,
           LOWER(TRIM(CAST(swc AS STRING))) AS swc
         FROM `@{DATASET_NAME}.gold_dim_req` AS r
-        CROSS JOIN UNNEST(r.Req_SW_Components) AS swc
+        CROSS JOIN UNNEST(r.Req_SW_Component_Ids) AS swc
         WHERE r.Req_Id IS NOT NULL
           AND TRIM(CAST(swc AS STRING)) != ''
       ),
@@ -83,20 +81,20 @@ view: dt_req_coverage_and_validation {
         GROUP BY parent_swc.Req_Id
       ),
 
-      -- 4. Distinct Test Cases linked per Requirement (from gold_dim_fact_req_tc and FACT_TC_TR_TS_REQ)
+      -- 4. Distinct Test Cases linked per Requirement (from Fact_Req_TC, Fact_TC_TR_TS_Req, and TBL_CB_SDV_Raw_TC_V2.Requirements)
       req_tc_links AS (
         SELECT DISTINCT Req_Id, TC_Id
-        FROM `@{DATASET_NAME}.gold_dim_fact_req_tc`
+        FROM `@{DATASET_NAME}.Fact_Req_TC`
         WHERE Req_Id IS NOT NULL AND TC_Id IS NOT NULL
         UNION DISTINCT
         SELECT DISTINCT Req_Id, TC_Id
-        FROM `@{DATASET_NAME}.FACT_TC_TR_TS_REQ`
+        FROM `@{DATASET_NAME}.Fact_TC_TR_TS_Req`
         WHERE Req_Id IS NOT NULL AND TC_Id IS NOT NULL
         UNION DISTINCT
-        SELECT DISTINCT r.Req_Id, tc_id AS TC_Id
-        FROM `@{DATASET_NAME}.gold_dim_req` AS r
-        CROSS JOIN UNNEST(r.Req_Test_Cases) AS tc_id
-        WHERE r.Req_Id IS NOT NULL AND tc_id IS NOT NULL
+        SELECT DISTINCT req_id AS Req_Id, tc.Id AS TC_Id
+        FROM `@{DATASET_NAME}.TBL_CB_SDV_Raw_TC_V2` AS tc
+        CROSS JOIN UNNEST(tc.Requirements) AS req_id
+        WHERE tc.Id IS NOT NULL AND req_id IS NOT NULL
       ),
 
       req_tc_agg AS (
@@ -115,16 +113,16 @@ view: dt_req_coverage_and_validation {
           f.TC_Id,
           f.TS_Id,
           f.TR_Id,
-          ts.TS_Bench_Type AS ts_bench_array,
+          ts.TS_Bench_Types AS ts_bench_array,
           ARRAY_TO_STRING(ts.TS_MySF, ', ') AS ts_mysf_str,
-          COALESCE(tr.Completed_At, tr.Created) AS tr_run_date,
+          CAST(COALESCE(tr.Completed_At, tr.Created) AS DATETIME) AS tr_run_date,
           CASE
             WHEN UPPER(TRIM(tr.Result)) IN ('PASSED', 'PASS', 'OK') THEN 'Passed'
             WHEN UPPER(TRIM(tr.Result)) IN ('FAILED', 'FAIL', 'KO', 'NOK') THEN 'Failed'
             WHEN UPPER(TRIM(tr.Result)) IN ('BLOCKED', 'BLOCK') THEN 'Blocked'
             ELSE 'Not Executed'
           END AS normalized_tr_result
-        FROM `@{DATASET_NAME}.FACT_TC_TR_TS_REQ` AS f
+        FROM `@{DATASET_NAME}.Fact_TC_TR_TS_Req` AS f
         LEFT JOIN `@{DATASET_NAME}.TBL_CB_SDV_Raw_TR_V2` AS tr
           ON f.TR_Id = tr.Id
         LEFT JOIN `@{DATASET_NAME}.gold_dim_ts` AS ts

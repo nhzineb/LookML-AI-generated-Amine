@@ -19,19 +19,19 @@ view: dt_req_bench_validation {
           f.TC_Id,
           f.TR_Id,
           TRIM(UPPER(bench)) AS TS_Bench_Type,
-          COALESCE(tr.Completed_At, tr.Created) AS tr_run_date,
+          CAST(COALESCE(tr.Completed_At, tr.Created) AS DATETIME) AS tr_run_date,
           CASE
             WHEN UPPER(TRIM(tr.Result)) IN ('PASSED', 'PASS', 'OK') THEN 'Passed'
             WHEN UPPER(TRIM(tr.Result)) IN ('FAILED', 'FAIL', 'KO', 'NOK') THEN 'Failed'
             WHEN UPPER(TRIM(tr.Result)) IN ('BLOCKED', 'BLOCK') THEN 'Blocked'
             ELSE 'Not Executed'
           END AS normalized_tr_result
-        FROM `@{DATASET_NAME}.FACT_TC_TR_TS_REQ` AS f
+        FROM `@{DATASET_NAME}.Fact_TC_TR_TS_Req` AS f
         LEFT JOIN `@{DATASET_NAME}.TBL_CB_SDV_Raw_TR_V2` AS tr
           ON f.TR_Id = tr.Id
         LEFT JOIN `@{DATASET_NAME}.gold_dim_ts` AS ts
           ON f.TS_Id = ts.TS_Id
-        CROSS JOIN UNNEST(ts.TS_Bench_Type) AS bench
+        CROSS JOIN UNNEST(ts.TS_Bench_Types) AS bench
         WHERE f.Req_Id IS NOT NULL
           AND f.TC_Id IS NOT NULL
           AND TRIM(bench) != ''

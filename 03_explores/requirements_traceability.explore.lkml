@@ -14,7 +14,6 @@ explore: requirements_traceability {
   description: "Requirement-grain Explore for Board 1 (Requirement Maturity, Vertical Traceability & Child Presence, SWC Child Coverage, MySF 26.2/27.2/28.2 Scope), Board 2.1 (Requirements Covered by Test Cases), and Board 4 (Requirement Validation Pass Rate)."
   view_name: gold_dim_req
   view_label: "1. Requirement Attributes (gold_dim_req)"
-  persist_with: ampere_sdv_gold_etl_datagroup
 
   join: dt_req_coverage_and_validation {
     view_label: "2. Requirement Coverage, Child & Validation KPIs"
