@@ -24,7 +24,7 @@
     default_value: "ADAS"
     allow_multiple_values: true
     required: false
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     field: gold_dim_req.req_domain
 
@@ -34,7 +34,7 @@
     default_value: "ADAS"
     allow_multiple_values: true
     required: false
-    model: ampere_sdv_analytics
+    model: qap
     explore: tc_horizontal_traceability
     field: tbl_cb_sdv_raw_tc_v2.domain
 
@@ -44,7 +44,7 @@
     default_value: "ADAS"
     allow_multiple_values: true
     required: false
-    model: ampere_sdv_analytics
+    model: qap
     explore: ts_pass_rate_by_sw_version
     field: dt_ts_release_execution.ts_domain
 
@@ -54,7 +54,7 @@
     default_value: ""
     allow_multiple_values: true
     required: false
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     field: gold_dim_req.req_mysf_any
 
@@ -64,7 +64,7 @@
     default_value: ""
     allow_multiple_values: true
     required: false
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     field: gold_dim_req.req_baseline_any
 
@@ -78,7 +78,7 @@
   - title: "B1.1 Regulatory, Customer Performance, Cyber"
     name: ov_b1_1_reg_cp_cyber_pie
     tab_name: tab_overview
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -110,7 +110,7 @@
   - title: "B1.2 Overall Domain and System Safety Requirements"
     name: ov_b1_2_domain_safety_pie
     tab_name: tab_overview
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -142,7 +142,7 @@
   - title: "B1.3 Supplier Status"
     name: ov_b1_3_supplier_status_pie
     tab_name: tab_overview
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -173,7 +173,7 @@
   - title: "B1.4 Make Missing Childs"
     name: ov_b1_4_make_missing_childs_pie
     tab_name: tab_overview
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -199,7 +199,7 @@
   - title: "B1.5 Cross System Missing Childs"
     name: ov_b1_5_cross_system_missing_childs_pie
     tab_name: tab_overview
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -230,7 +230,7 @@
   - title: "B2.1 Reqs Covered by TC"
     name: ov_b2_1_reqs_covered_by_tc_pie
     tab_name: tab_overview
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -259,7 +259,7 @@
   - title: "B2.2 TC Coverage by Bench Type"
     name: ov_b2_2_tc_bench_type_pie
     tab_name: tab_overview
-    model: ampere_sdv_analytics
+    model: qap
     explore: tc_horizontal_traceability
     type: looker_pie
     fields:
@@ -284,7 +284,7 @@
   - title: "B2.3 TC Deployment in TS Generic (PVAL)"
     name: ov_b2_3_tc_in_ts_generic_pie
     tab_name: tab_overview
-    model: ampere_sdv_analytics
+    model: qap
     explore: tc_horizontal_traceability
     type: looker_pie
     fields:
@@ -309,7 +309,7 @@
   - title: "B2.4 TC Deployment in TS Execution"
     name: ov_b2_4_tc_in_ts_execution_pie
     tab_name: tab_overview
-    model: ampere_sdv_analytics
+    model: qap
     explore: tc_horizontal_traceability
     type: looker_pie
     fields:
@@ -334,7 +334,7 @@
   - title: "B2.5 TC Execution"
     name: ov_b2_5_tc_execution_pie
     tab_name: tab_overview
-    model: ampere_sdv_analytics
+    model: qap
     explore: tc_horizontal_traceability
     type: looker_pie
     fields:
@@ -362,7 +362,7 @@
   - title: "B3.1 TS Pass Rate SWE.6"
     name: ov_b3_1_ts_pass_rate_swe6_pie
     tab_name: tab_overview
-    model: ampere_sdv_analytics
+    model: qap
     explore: ts_pass_rate_by_sw_version
     type: looker_pie
     fields:
@@ -392,7 +392,7 @@
   - title: "B3.2 TS Pass Rate C3V"
     name: ov_b3_2_ts_pass_rate_c3v_pie
     tab_name: tab_overview
-    model: ampere_sdv_analytics
+    model: qap
     explore: ts_pass_rate_by_sw_version
     type: looker_pie
     fields:
@@ -422,7 +422,7 @@
   - title: "B3.3 TS Pass Rate HIL BL6/BL7"
     name: ov_b3_3_ts_pass_rate_hil_bl6_bl7_pie
     tab_name: tab_overview
-    model: ampere_sdv_analytics
+    model: qap
     explore: ts_pass_rate_by_sw_version
     type: looker_pie
     fields:
@@ -452,7 +452,7 @@
   - title: "B3.4 TS Pass Rate EIPF BL6/BL7"
     name: ov_b3_4_ts_pass_rate_eipf_bl6_bl7_pie
     tab_name: tab_overview
-    model: ampere_sdv_analytics
+    model: qap
     explore: ts_pass_rate_by_sw_version
     type: looker_pie
     fields:
@@ -482,7 +482,7 @@
   - title: "B3.5 TS Pass Rate VHL BL6/BL7"
     name: ov_b3_5_ts_pass_rate_vhl_bl6_bl7_pie
     tab_name: tab_overview
-    model: ampere_sdv_analytics
+    model: qap
     explore: ts_pass_rate_by_sw_version
     type: looker_pie
     fields:
@@ -513,7 +513,7 @@
   - title: "B4.1 SCRS"
     name: ov_b4_1_scrs_pie
     tab_name: tab_overview
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -544,7 +544,7 @@
   - title: "B4.2 SRS"
     name: ov_b4_2_srs_pie
     tab_name: tab_overview
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -575,7 +575,7 @@
   - title: "B4.3 SFREQ White Box"
     name: ov_b4_3_sfreq_white_box_pie
     tab_name: tab_overview
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -606,7 +606,7 @@
   - title: "B4.4 SOREQ"
     name: ov_b4_4_soreq_pie
     tab_name: tab_overview
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -637,7 +637,7 @@
   - title: "B4.5 VOREQ"
     name: ov_b4_5_voreq_pie
     tab_name: tab_overview
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -673,7 +673,7 @@
   - title: "Regulatory, Customer Performance, Cyber"
     name: b1_1_reg_cp_cyber_pie
     tab_name: tab_1_req_vertical
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -703,7 +703,7 @@
   - title: "Overall Domain and System Safety Requirements"
     name: b1_2_domain_safety_pie
     tab_name: tab_1_req_vertical
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -733,7 +733,7 @@
   - title: "Supplier Status"
     name: b1_3_supplier_status_pie
     tab_name: tab_1_req_vertical
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -763,7 +763,7 @@
   - title: "Make Missing Childs"
     name: b1_4_make_missing_childs_pie
     tab_name: tab_1_req_vertical
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -788,7 +788,7 @@
   - title: "Cross System Missing Childs"
     name: b1_5_cross_system_missing_childs_pie
     tab_name: tab_1_req_vertical
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -818,7 +818,7 @@
   - title: "Regulatory, CP, Cyber - Count"
     name: b1_1_reg_cp_cyber_bar
     tab_name: tab_1_req_vertical
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_bar
     fields:
@@ -848,7 +848,7 @@
   - title: "Overall Domain & Safety - Count"
     name: b1_2_domain_safety_bar
     tab_name: tab_1_req_vertical
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_bar
     fields:
@@ -878,7 +878,7 @@
   - title: "Supplier Status - Count"
     name: b1_3_supplier_status_bar
     tab_name: tab_1_req_vertical
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_bar
     fields:
@@ -908,7 +908,7 @@
   - title: "Make Missing Childs - Count"
     name: b1_4_make_missing_childs_bar
     tab_name: tab_1_req_vertical
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_bar
     fields:
@@ -935,7 +935,7 @@
   - title: "Cross System Missing Childs - Count"
     name: b1_5_cross_system_missing_childs_bar
     tab_name: tab_1_req_vertical
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_bar
     fields:
@@ -967,7 +967,7 @@
   - title: "Requirement Status by V-Cycle Engineering Level (01-SG to 23-SURS)"
     name: b1_chart_req_status_by_level
     tab_name: tab_1_req_vertical
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_column
     fields:
@@ -990,7 +990,7 @@
   - title: "Make Missing Childs by Engineering Level"
     name: b1_chart_child_presence_by_level
     tab_name: tab_1_req_vertical
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_column
     fields:
@@ -1013,7 +1013,7 @@
   - title: "Board 1 Detail Table: Requirements & Vertical Traceability Explorer"
     name: b1_grid_requirements_detail
     tab_name: tab_1_req_vertical
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_grid
     fields:
@@ -1045,7 +1045,7 @@
   - title: "Reqs Covered by TC"
     name: b2_1_reqs_covered_by_tc_pie
     tab_name: tab_2_tc_horizontal
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -1073,7 +1073,7 @@
   - title: "TC Coverage by Bench Type"
     name: b2_2_tc_bench_type_pie
     tab_name: tab_2_tc_horizontal
-    model: ampere_sdv_analytics
+    model: qap
     explore: tc_horizontal_traceability
     type: looker_pie
     fields:
@@ -1097,7 +1097,7 @@
   - title: "TC Deployment in TS Generic (PVAL)"
     name: b2_3_tc_in_ts_generic_pie
     tab_name: tab_2_tc_horizontal
-    model: ampere_sdv_analytics
+    model: qap
     explore: tc_horizontal_traceability
     type: looker_pie
     fields:
@@ -1121,7 +1121,7 @@
   - title: "TC Deployment in TS Execution"
     name: b2_4_tc_in_ts_execution_pie
     tab_name: tab_2_tc_horizontal
-    model: ampere_sdv_analytics
+    model: qap
     explore: tc_horizontal_traceability
     type: looker_pie
     fields:
@@ -1145,7 +1145,7 @@
   - title: "TC Execution"
     name: b2_5_tc_execution_pie
     tab_name: tab_2_tc_horizontal
-    model: ampere_sdv_analytics
+    model: qap
     explore: tc_horizontal_traceability
     type: looker_pie
     fields:
@@ -1172,7 +1172,7 @@
   - title: "Reqs Covered by TC - Count"
     name: b2_1_reqs_covered_by_tc_bar
     tab_name: tab_2_tc_horizontal
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_bar
     fields:
@@ -1200,7 +1200,7 @@
   - title: "TC Coverage by Bench Type - Count"
     name: b2_2_tc_bench_type_bar
     tab_name: tab_2_tc_horizontal
-    model: ampere_sdv_analytics
+    model: qap
     explore: tc_horizontal_traceability
     type: looker_bar
     fields:
@@ -1226,7 +1226,7 @@
   - title: "TC Deployment in TS Generic - Count"
     name: b2_3_tc_in_ts_generic_bar
     tab_name: tab_2_tc_horizontal
-    model: ampere_sdv_analytics
+    model: qap
     explore: tc_horizontal_traceability
     type: looker_bar
     fields:
@@ -1252,7 +1252,7 @@
   - title: "TC Deployment in TS Execution - Count"
     name: b2_4_tc_in_ts_execution_bar
     tab_name: tab_2_tc_horizontal
-    model: ampere_sdv_analytics
+    model: qap
     explore: tc_horizontal_traceability
     type: looker_bar
     fields:
@@ -1278,7 +1278,7 @@
   - title: "TC Execution - Count"
     name: b2_5_tc_execution_bar
     tab_name: tab_2_tc_horizontal
-    model: ampere_sdv_analytics
+    model: qap
     explore: tc_horizontal_traceability
     type: looker_bar
     fields:
@@ -1307,7 +1307,7 @@
   - title: "Reqs Covered by TC (All 4 Statuses by Engineering Level)"
     name: b2_chart_req_covered_status_by_level
     tab_name: tab_2_tc_horizontal
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_column
     fields:
@@ -1330,7 +1330,7 @@
   - title: "TC Execution & Jira Derogation Retest Readiness (7-Bucket)"
     name: b2_chart_tc_7bucket_readiness
     tab_name: tab_2_tc_horizontal
-    model: ampere_sdv_analytics
+    model: qap
     explore: tc_horizontal_traceability
     type: looker_bar
     fields:
@@ -1350,7 +1350,7 @@
   - title: "Board 2 Detail Table: Test Cases Horizontal Traceability & Defect Readiness"
     name: b2_grid_tc_horizontal_detail
     tab_name: tab_2_tc_horizontal
-    model: ampere_sdv_analytics
+    model: qap
     explore: tc_horizontal_traceability
     type: looker_grid
     fields:
@@ -1384,7 +1384,7 @@
   - title: "TS Pass Rate SWE.6"
     name: b3_1_ts_pass_rate_swe6_pie
     tab_name: tab_3_ts_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: ts_pass_rate_by_sw_version
     type: looker_pie
     fields:
@@ -1413,7 +1413,7 @@
   - title: "TS Pass Rate C3V"
     name: b3_2_ts_pass_rate_c3v_pie
     tab_name: tab_3_ts_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: ts_pass_rate_by_sw_version
     type: looker_pie
     fields:
@@ -1442,7 +1442,7 @@
   - title: "TS Pass Rate HIL BL6/BL7"
     name: b3_3_ts_pass_rate_hil_bl6_bl7_pie
     tab_name: tab_3_ts_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: ts_pass_rate_by_sw_version
     type: looker_pie
     fields:
@@ -1471,7 +1471,7 @@
   - title: "TS Pass Rate EIPF BL6/BL7"
     name: b3_4_ts_pass_rate_eipf_bl6_bl7_pie
     tab_name: tab_3_ts_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: ts_pass_rate_by_sw_version
     type: looker_pie
     fields:
@@ -1500,7 +1500,7 @@
   - title: "TS Pass Rate VHL BL6/BL7"
     name: b3_5_ts_pass_rate_vhl_bl6_bl7_pie
     tab_name: tab_3_ts_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: ts_pass_rate_by_sw_version
     type: looker_pie
     fields:
@@ -1530,7 +1530,7 @@
   - title: "TS Pass Rate SWE.6 - Count"
     name: b3_1_ts_pass_rate_swe6_bar
     tab_name: tab_3_ts_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: ts_pass_rate_by_sw_version
     type: looker_bar
     fields:
@@ -1561,7 +1561,7 @@
   - title: "TS Pass Rate C3V - Count"
     name: b3_2_ts_pass_rate_c3v_bar
     tab_name: tab_3_ts_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: ts_pass_rate_by_sw_version
     type: looker_bar
     fields:
@@ -1592,7 +1592,7 @@
   - title: "TS Pass Rate HIL BL6/BL7 - Count"
     name: b3_3_ts_pass_rate_hil_bl6_bl7_bar
     tab_name: tab_3_ts_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: ts_pass_rate_by_sw_version
     type: looker_bar
     fields:
@@ -1623,7 +1623,7 @@
   - title: "TS Pass Rate EIPF BL6/BL7 - Count"
     name: b3_4_ts_pass_rate_eipf_bl6_bl7_bar
     tab_name: tab_3_ts_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: ts_pass_rate_by_sw_version
     type: looker_bar
     fields:
@@ -1654,7 +1654,7 @@
   - title: "TS Pass Rate VHL BL6/BL7 - Count"
     name: b3_5_ts_pass_rate_vhl_bl6_bl7_bar
     tab_name: tab_3_ts_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: ts_pass_rate_by_sw_version
     type: looker_bar
     fields:
@@ -1686,7 +1686,7 @@
   - title: "TS Execution Verdict by SW Release Version (TS_Release)"
     name: b3_chart_release_verdict_by_sw_version
     tab_name: tab_3_ts_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: ts_pass_rate_by_sw_version
     type: looker_column
     fields:
@@ -1711,7 +1711,7 @@
   - title: "TS Execution Verdict by Baseline Family (BL6 vs BL7 vs Combined BL6_BL7)"
     name: b3_chart_bl_family_comparison
     tab_name: tab_3_ts_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: ts_pass_rate_by_sw_version
     type: looker_column
     fields:
@@ -1734,7 +1734,7 @@
   - title: "Board 3 Detail Table: Test Set SW Release & Baseline Execution Explorer"
     name: b3_grid_ts_release_detail
     tab_name: tab_3_ts_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: ts_pass_rate_by_sw_version
     type: looker_grid
     fields:
@@ -1767,7 +1767,7 @@
   - title: "SCRS"
     name: b4_1_scrs_pie
     tab_name: tab_4_req_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -1797,7 +1797,7 @@
   - title: "SRS"
     name: b4_2_srs_pie
     tab_name: tab_4_req_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -1827,7 +1827,7 @@
   - title: "SFREQ White Box"
     name: b4_3_sfreq_white_box_pie
     tab_name: tab_4_req_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -1857,7 +1857,7 @@
   - title: "SOREQ"
     name: b4_4_soreq_pie
     tab_name: tab_4_req_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -1887,7 +1887,7 @@
   - title: "VOREQ"
     name: b4_5_voreq_pie
     tab_name: tab_4_req_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_pie
     fields:
@@ -1918,7 +1918,7 @@
   - title: "SCRS - Count"
     name: b4_1_scrs_bar
     tab_name: tab_4_req_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_bar
     fields:
@@ -1949,7 +1949,7 @@
   - title: "SRS - Count"
     name: b4_2_srs_bar
     tab_name: tab_4_req_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_bar
     fields:
@@ -1980,7 +1980,7 @@
   - title: "SFREQ White Box - Count"
     name: b4_3_sfreq_white_box_bar
     tab_name: tab_4_req_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_bar
     fields:
@@ -2011,7 +2011,7 @@
   - title: "SOREQ - Count"
     name: b4_4_soreq_bar
     tab_name: tab_4_req_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_bar
     fields:
@@ -2042,7 +2042,7 @@
   - title: "VOREQ - Count"
     name: b4_5_voreq_bar
     tab_name: tab_4_req_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_bar
     fields:
@@ -2074,7 +2074,7 @@
   - title: "Requirement Validation Result across All Engineering Levels"
     name: b4_chart_req_pass_rate_by_level
     tab_name: tab_4_req_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_column
     fields:
@@ -2097,7 +2097,7 @@
   - title: "Requirement Validation Result by Test Bench Type (HIL / EIPF / VHL / SIL)"
     name: b4_chart_req_pass_rate_by_bench
     tab_name: tab_4_req_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: req_pass_rate_by_bench
     type: looker_column
     fields:
@@ -2120,7 +2120,7 @@
   - title: "Board 4 Detail Table: Requirement Validation & Per-Bench Status Explorer"
     name: b4_grid_req_validation_detail
     tab_name: tab_4_req_pass_rate
-    model: ampere_sdv_analytics
+    model: qap
     explore: requirements_traceability
     type: looker_grid
     fields:

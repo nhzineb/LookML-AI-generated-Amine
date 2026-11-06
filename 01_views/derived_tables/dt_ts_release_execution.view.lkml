@@ -30,7 +30,7 @@ view: dt_ts_release_execution {
             ELSE 'Not Executed'
           END AS TR_Result,
           COALESCE(ts.TS_Domain, tc.Domain) AS TS_Domain,
-          COALESCE(f.TR_MySF, ARRAY_TO_STRING(r.Req_MySF, ', ')) AS Req_MySF,
+          COALESCE(f.TR_MySF.TR_MySF, ARRAY_TO_STRING(r.Req_MySF, ', ')) AS Req_MySF,
           ARRAY_TO_STRING(ts.TS_MySF, ', ') AS TS_MySF,
           ts.TS_Type AS TS_Type,
           ARRAY_TO_STRING(tc.Validation_Teams, ', ') AS TC_Validation_Team,
